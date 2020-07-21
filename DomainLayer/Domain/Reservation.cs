@@ -23,7 +23,7 @@ namespace DomainLayer.Domain
 
         public int ID { get; set; }
         public Client Client { get; set; }
-        public IList<Car> Cars { get; set; }
+        public ICollection<Car> Cars { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime ReservationDate { get; set; }
         public string StartLocation { get; set; }

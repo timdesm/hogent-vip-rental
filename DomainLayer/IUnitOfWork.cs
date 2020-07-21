@@ -3,7 +3,7 @@ using System;
 
 namespace DomainLayer
 {
-    public class IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         ICarRepository Cars { get; }
         IClientRepository Clients { get; }
