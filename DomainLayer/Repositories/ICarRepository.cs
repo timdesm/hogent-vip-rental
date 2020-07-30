@@ -8,5 +8,7 @@ namespace DomainLayer.Repositories
     public interface ICarRepository
     {
         void AddCar(Car car);
+        IEnumerable<Car> FindAll();
+        Car Find(int ID);
     }
 }

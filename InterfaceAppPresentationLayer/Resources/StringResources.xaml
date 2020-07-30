@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="general_reset">Reset</system:String>
+
+    <system:String x:Key="home_title">Home</system:String>
+    <system:String x:Key="clients_title">Clients</system:String>
+    <system:String x:Key="reservations_title">Reservations</system:String>
+    <system:String x:Key="invoices_title">Invoices</system:String>
+    <system:String x:Key="cars_title">Vehicles</system:String>
+    <system:String x:Key="newclient_title">New Client</system:String>
+    <system:String x:Key="newreservation_title">New Reservation</system:String>
+
+    <system:String x:Key="cars_add_brand">Brand</system:String>
+    <system:String x:Key="cars_add_model">Model</system:String>
+    <system:String x:Key="cars_add_color">Color</system:String>
+    <system:String x:Key="cars_add_price_first">Price First Hour</system:String>
+    <system:String x:Key="cars_add_price_night">Pirce Night</system:String>
+    <system:String x:Key="cars_add_price_wedding">Pirce Wedding</system:String>
+    <system:String x:Key="cars_add_price_wellness">Pirce Wellness</system:String>
+    <system:String x:Key="cars_add_available">Available</system:String>
+    <system:String x:Key="cars_add_submit">Add Vehicle</system:String>
+
+    <system:String x:Key="settings_title">Settings</system:String>
+    <system:String x:Key="settings_controls_dark_header">Dark Mode</system:String>
+    <system:String x:Key="settings_controls_language_header">Language</system:String>
+    
+    <system:String x:Key="new_client_submit">New Client</system:String>
+
+</ResourceDictionary>

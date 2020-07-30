@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(RentalContext))]
-    [Migration("20200721140631_Initial")]
-    partial class Initial
+    [Migration("20200728163248_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,23 +49,35 @@ namespace DataLayer.Migrations
                     b.Property<double>("PriceWellness")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ReservationID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
+                    b.ToTable("Cars");
+                });
+
+            modelBuilder.Entity("DomainLayer.Domain.CarReservation", b =>
+                {
+                    b.Property<int>("CarID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReservationID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarID", "ReservationID");
+
                     b.HasIndex("ReservationID");
 
-                    b.ToTable("Cars");
+                    b.ToTable("CarReservations");
                 });
 
             modelBuilder.Entity("DomainLayer.Domain.Client", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AddressBus")
                         .HasColumnType("nvarchar(max)");
@@ -118,8 +130,8 @@ namespace DataLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClientID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ClientID")
+                        .HasColumnType("int");
 
                     b.Property<double>("Discount")
                         .HasColumnType("float");
@@ -194,8 +206,8 @@ namespace DataLayer.Migrations
                     b.Property<int>("Arrangement")
                         .HasColumnType("int");
 
-                    b.Property<string>("ClientID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ClientID")
+                        .HasColumnType("int");
 
                     b.Property<string>("EndLocation")
                         .HasColumnType("nvarchar(max)");
@@ -227,11 +239,19 @@ namespace DataLayer.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("DomainLayer.Domain.Car", b =>
+            modelBuilder.Entity("DomainLayer.Domain.CarReservation", b =>
                 {
-                    b.HasOne("DomainLayer.Domain.Reservation", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("ReservationID");
+                    b.HasOne("DomainLayer.Domain.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainLayer.Domain.Reservation", "Reservation")
+                        .WithMany("CarReservations")
+                        .HasForeignKey("ReservationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLayer.Domain.Invoice", b =>

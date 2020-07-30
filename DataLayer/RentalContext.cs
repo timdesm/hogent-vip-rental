@@ -37,9 +37,12 @@ namespace DataLayer
 
         public DbSet<Car> Cars { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<InvoiceItem> InvoiceItems {get; set;}
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<CarReservation> CarReservations { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (connectionString == null)
@@ -47,6 +50,12 @@ namespace DataLayer
                 SetConnectionString();
             }
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CarReservation>()
+                 .HasKey(c => new { c.CarID, c.ReservationID });
         }
     }
 }

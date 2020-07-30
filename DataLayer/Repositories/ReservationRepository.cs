@@ -19,5 +19,10 @@ namespace DataLayer.Repositories
         {
             context.Reservations.Add(reservation);
         }
+
+        public void RemoveReservation(int id)
+        {
+
+        }
     }
 }

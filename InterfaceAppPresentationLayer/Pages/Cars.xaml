@@ -1,0 +1,41 @@
+﻿<ui:Page  
+      x:Class="InterfaceAppPresentationLayer.Pages.Cars"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InterfaceAppPresentationLayer.Pages" 
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Cars">
+
+    <Border BorderBrush="{DynamicResource  MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12" Margin="24,0,24,24">
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="DataTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="{DynamicResource  MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" Padding="12,12,12,12" Margin="20,0,0,0">
+                <ui:SimpleStackPanel>
+                    <TextBox x:Name="newBrand" ui:ControlHelper.Header="{DynamicResource cars_add_brand}" />
+                    <TextBox x:Name="newType" ui:ControlHelper.Header="{DynamicResource cars_add_model}" Margin="0,5,0,0" />
+                    <ComboBox x:Name="newColor" ui:ControlHelper.Header="{DynamicResource cars_add_color}" HorizontalAlignment="Stretch" Margin="0,5,0,0"/>
+                    <ui:NumberBox x:Name="newPriceFirst" ui:ControlHelper.Header="{DynamicResource cars_add_price_first}" Value="0.00" Margin="0,5,0,0" />
+                    <ui:NumberBox x:Name="newPriceNight" ui:ControlHelper.Header="{DynamicResource cars_add_price_night}" Value="0.00" Margin="0,5,0,0" />
+                    <ui:NumberBox x:Name="newPriceWedding" ui:ControlHelper.Header="{DynamicResource cars_add_price_wedding}" Value="0.00" Margin="0,5,0,0" />
+                    <ui:NumberBox x:Name="newPriceWellness" ui:ControlHelper.Header="{DynamicResource cars_add_price_wellness}" Value="0.00" Margin="0,5,0,0" />
+                    <ui:ToggleSwitch x:Name="newAvailable" Header="{DynamicResource cars_add_available}" IsOn="True" />
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <Button Content="{DynamicResource cars_add_submit}" Style="{StaticResource AccentButtonStyle}" />
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+
+</ui:Page>

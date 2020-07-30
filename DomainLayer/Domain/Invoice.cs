@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -27,6 +29,8 @@ namespace DomainLayer.Domain
             PaymentDue = TotalInc;
         }
 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public Client Client { get; set; }
         public DateTime InvoiceDate { get; set; }

@@ -3,15 +3,36 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataLayer.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Cars",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Brand = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true),
+                    PriceFirst = table.Column<double>(nullable: false),
+                    PriceNight = table.Column<double>(nullable: false),
+                    PriceWedding = table.Column<double>(nullable: false),
+                    PriceWellness = table.Column<double>(nullable: false),
+                    Available = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cars", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
-                    ID = table.Column<string>(nullable: false),
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
@@ -37,7 +58,7 @@ namespace DataLayer.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientID = table.Column<string>(nullable: true),
+                    ClientID = table.Column<int>(nullable: true),
                     InvoiceDate = table.Column<DateTime>(nullable: false),
                     DiscountPercent = table.Column<double>(nullable: false),
                     Discount = table.Column<double>(nullable: false),
@@ -88,7 +109,7 @@ namespace DataLayer.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientID = table.Column<string>(nullable: true),
+                    ClientID = table.Column<int>(nullable: true),
                     OrderDate = table.Column<DateTime>(nullable: false),
                     ReservationDate = table.Column<DateTime>(nullable: false),
                     StartLocation = table.Column<string>(nullable: true),
@@ -116,35 +137,32 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cars",
+                name: "CarReservations",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Brand = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
-                    Color = table.Column<string>(nullable: true),
-                    PriceFirst = table.Column<double>(nullable: false),
-                    PriceNight = table.Column<double>(nullable: false),
-                    PriceWedding = table.Column<double>(nullable: false),
-                    PriceWellness = table.Column<double>(nullable: false),
-                    Available = table.Column<bool>(nullable: false),
-                    ReservationID = table.Column<int>(nullable: true)
+                    ReservationID = table.Column<int>(nullable: false),
+                    CarID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cars", x => x.ID);
+                    table.PrimaryKey("PK_CarReservations", x => new { x.CarID, x.ReservationID });
                     table.ForeignKey(
-                        name: "FK_Cars_Reservations_ReservationID",
+                        name: "FK_CarReservations_Cars_CarID",
+                        column: x => x.CarID,
+                        principalTable: "Cars",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CarReservations_Reservations_ReservationID",
                         column: x => x.ReservationID,
                         principalTable: "Reservations",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_ReservationID",
-                table: "Cars",
+                name: "IX_CarReservations_ReservationID",
+                table: "CarReservations",
                 column: "ReservationID");
 
             migrationBuilder.CreateIndex(
@@ -171,10 +189,13 @@ namespace DataLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Cars");
+                name: "CarReservations");
 
             migrationBuilder.DropTable(
                 name: "InvoiceItems");
+
+            migrationBuilder.DropTable(
+                name: "Cars");
 
             migrationBuilder.DropTable(
                 name: "Reservations");

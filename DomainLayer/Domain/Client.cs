@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Text;
 
@@ -26,8 +28,9 @@ namespace DomainLayer.Domain
             VATNumber = vatNumber;
         }
 
-
-        public string ID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
         public ClientType Type { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

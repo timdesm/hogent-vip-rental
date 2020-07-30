@@ -2,6 +2,7 @@
 using DomainLayer.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DataLayer.Repositories
@@ -20,5 +21,14 @@ namespace DataLayer.Repositories
             context.Cars.Add(car);
         }
 
+        public IEnumerable<Car> FindAll()
+        {
+            return context.Cars.OrderBy(c => c.ID).AsEnumerable<Car>();
+        }
+
+        public Car Find(int id)
+        {
+            return context.Cars.Find(id);
+        }
     }
 }

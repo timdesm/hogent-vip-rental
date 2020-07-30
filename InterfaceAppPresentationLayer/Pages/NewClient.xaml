@@ -1,0 +1,78 @@
+﻿<ui:Page x:Class="InterfaceAppPresentationLayer.Pages.NewClient"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InterfaceAppPresentationLayer.Pages" 
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="NewClient">
+
+    <Border Grid.Row="1" BorderBrush="#FFFFFF" BorderThickness="1" Padding="12" Margin="24,0,24,24" >
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <ui:SimpleStackPanel >
+                    <ui:SimpleStackPanel Spacing="4">
+                        <TextBox ui:ControlHelper.Header="First Name:" x:Name="inFirstName" TextChanged="inFirstName_TextChanged"/>
+                        <TextBox ui:ControlHelper.Header="Last Name:" x:Name="inLastName" TextChanged="inLastName_TextChanged" />
+                        <TextBox ui:ControlHelper.Header="Phone:" x:Name="inPhone"  />
+                        <TextBox ui:ControlHelper.Header="Email:" x:Name="inEmail"  />
+                        <TextBox ui:ControlHelper.Header="Street:" x:Name="inAddrStreet"  />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox ui:ControlHelper.Header="House Number:" x:Name="inAddrNumber" Margin="0,0,5,0"  />
+                            <TextBox Grid.Column="1" ui:ControlHelper.Header="Box:" x:Name="inAddrBox" Margin="5,0,0,0"  />
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox ui:ControlHelper.Header="City:" x:Name="inAddrCity" Margin="0,0,5,0" />
+                            <TextBox Grid.Column="1" ui:ControlHelper.Header="Zip code:" x:Name="inAddrZip" Margin="5,0,0,0" />
+                        </Grid>
+
+                        <ComboBox ui:ControlHelper.Header="Country:" x:Name="inAddrCountry" HorizontalAlignment="Stretch" />
+
+                        <ComboBox ui:ControlHelper.Header="Account Type:" x:Name="inAccountType" HorizontalAlignment="Stretch" SelectionChanged="inAccountType_SelectionChanged" />
+                        <TextBox ui:ControlHelper.Header="Company Name:" x:Name="inCompany" Visibility="Hidden" />
+                        <TextBox ui:ControlHelper.Header="VAT Number:" x:Name="inVAT" Visibility="Hidden" />
+
+                        <Button x:Name="Submit" Content="{DynamicResource new_client_submit}" Height="32" Width="267" HorizontalAlignment="Left" Style="{StaticResource AccentButtonStyle}" Click="Submit_Click" Margin="0,15,0,0"  />
+                        <TextBlock x:Name="SubmitThrowback" />
+
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+            </ScrollViewer>
+
+            <ui:SimpleStackPanel Grid.Column="1" HorizontalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundAltLowBrush}" Margin="20,0,20,0">
+                <ui:PersonPicture x:Name="avatarPicture" Margin="0,10,0,0" />
+                <TextBlock x:Name="prevName" Text="Tim De Smet" TextAlignment="Center" FontSize="20" FontWeight="Bold" Margin="0,5,0,0"  />
+                <TextBlock x:Name="prevCompany" Text="Jetstax" TextAlignment="Center" FontSize="15" Visibility="Hidden" />
+                <TextBlock x:Name="prevVAT" Text="BE1001565456" TextAlignment="Center" FontSize="10" Visibility="Hidden" />
+
+                <TextBlock x:Name="prevEmail" Text="tim.de.smet@hotmail.be" TextAlignment="Center" FontSize="14" Margin="0,15,0,0"  />
+                <TextBlock x:Name="prevPhone" Text="+3493100289" TextAlignment="Center" FontSize="14"  />
+
+                <TextBlock x:Name="prevAddrStreet" Text="Azaleastraat 57" TextAlignment="Center" FontSize="14" Margin="0,15,0,0"  />
+                <TextBlock x:Name="prevAddrCity" Text="Evergem, 9940" TextAlignment="Center" FontSize="14"  />
+                <TextBlock x:Name="prevAddrCountry" Text="Belgium" TextAlignment="Center" FontSize="14"  />
+
+            </ui:SimpleStackPanel>
+
+        </Grid>
+    </Border>
+</ui:Page>

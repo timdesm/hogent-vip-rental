@@ -1,14 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Company>Codentox</Company>
+    <Authors>Tim De Smet</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\unicodeCountries.json" />
+    <None Remove="Resources\unicodeLanguage.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\unicodeCountries.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\unicodeLanguage.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.1.1" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
     <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\spashscreen.png" />
   </ItemGroup>
 
 </Project>

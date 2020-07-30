@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="general_reset">Reset</system:String>
+
+    <system:String x:Key="home_title">Home</system:String>
+    <system:String x:Key="clients_title">Klanten</system:String>
+    <system:String x:Key="reservations_title">Reservaties</system:String>
+    <system:String x:Key="invoices_title">Facturen</system:String>
+    <system:String x:Key="cars_title">Voertuigen</system:String>
+    <system:String x:Key="newclient_title">Nieuwe Klant</system:String>
+    <system:String x:Key="newreservation_title">Nieuwe Reservatie</system:String>
+
+    <system:String x:Key="cars_add_brand">Merk</system:String>
+    <system:String x:Key="cars_add_model">Model</system:String>
+    <system:String x:Key="cars_add_color">Kleur</system:String>
+    <system:String x:Key="cars_add_price_first">Prijs Eerste Uur</system:String>
+    <system:String x:Key="cars_add_price_night">Nachtprijs</system:String>
+    <system:String x:Key="cars_add_price_wedding">Prijs Trouw</system:String>
+    <system:String x:Key="cars_add_price_wellness">Prijs Wellness</system:String>
+    <system:String x:Key="cars_add_available">Beschikbaar</system:String>
+    <system:String x:Key="cars_add_submit">Voeg Auto Toe</system:String>
+
+    <system:String x:Key="settings_title">Instellingen</system:String>
+    <system:String x:Key="settings_controls_dark_header">Donkere Modus</system:String>
+    <system:String x:Key="settings_controls_language_header">Taal</system:String>
+
+    <system:String x:Key="new_client_submit">Nieuwe Klant</system:String>
+
+</ResourceDictionary>
