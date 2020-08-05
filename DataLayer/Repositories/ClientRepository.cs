@@ -36,12 +36,12 @@ namespace DataLayer.Repositories
             return context.Clients.Where(c => c.Email.ToLower() == email.ToLower()).Last();
         }
 
-        public IEnumerable<Client> FindNewestClients(int amount)
+        public IEnumerable<Client> FindNewest(int amount)
         {
-            return context.Clients.OrderBy(c => c.ID).TakeLast(amount).AsEnumerable<Client>();
+            return (from c in context.Clients orderby c.ID descending select c).Take(amount);
         }
 
-        public void RemoveClient(int id)
+        public void Remove(int id)
         {
             context.Clients.Remove(new Client() { ID = id });
         }

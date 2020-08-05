@@ -19,11 +19,20 @@
 
             <DataGrid x:Name="DataTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
 
-            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="{DynamicResource  MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" Padding="12,12,12,12" Margin="20,0,0,0">
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" Padding="12,12,12,12" Margin="20,0,0,0">
                 <ui:SimpleStackPanel>
                     <TextBox x:Name="newBrand" ui:ControlHelper.Header="{DynamicResource cars_add_brand}" />
                     <TextBox x:Name="newType" ui:ControlHelper.Header="{DynamicResource cars_add_model}" Margin="0,5,0,0" />
-                    <ComboBox x:Name="newColor" ui:ControlHelper.Header="{DynamicResource cars_add_color}" HorizontalAlignment="Stretch" Margin="0,5,0,0"/>
+                    <ComboBox x:Name="newColor" ui:ControlHelper.Header="{DynamicResource cars_add_color}" HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="0,2,5,2" />
+                                    <TextBlock Text="{Binding Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <ui:NumberBox x:Name="newPriceFirst" ui:ControlHelper.Header="{DynamicResource cars_add_price_first}" Value="0.00" Margin="0,5,0,0" />
                     <ui:NumberBox x:Name="newPriceNight" ui:ControlHelper.Header="{DynamicResource cars_add_price_night}" Value="0.00" Margin="0,5,0,0" />
                     <ui:NumberBox x:Name="newPriceWedding" ui:ControlHelper.Header="{DynamicResource cars_add_price_wedding}" Value="0.00" Margin="0,5,0,0" />
@@ -31,11 +40,11 @@
                     <ui:ToggleSwitch x:Name="newAvailable" Header="{DynamicResource cars_add_available}" IsOn="True" />
 
                     <ui:SimpleStackPanel Orientation="Horizontal" Margin="0,10,0,0" >
-                        <Button Content="{DynamicResource cars_add_submit}" Style="{StaticResource AccentButtonStyle}" />
+                        <Button Content="{DynamicResource cars_add_submit}" Style="{StaticResource AccentButtonStyle}" Click="Submit_Click" />
                     </ui:SimpleStackPanel>
                 </ui:SimpleStackPanel>
             </ScrollViewer>
         </Grid>
     </Border>
-
+    
 </ui:Page>

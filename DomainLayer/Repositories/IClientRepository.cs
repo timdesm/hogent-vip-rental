@@ -11,7 +11,7 @@ namespace DomainLayer.Repositories
         IEnumerable<Client> FindAll();
         Client Find(int ID);
         Client Find(string email);
-        IEnumerable<Client> FindNewestClients(int amount);
-        void RemoveClient(int id);
+        IEnumerable<Client> FindNewest(int amount);
+        void Remove(int id);
     }
 }

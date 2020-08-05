@@ -32,6 +32,11 @@ namespace DomainLayer.Domain
             return uow.Clients.FindAll().ToList();
         }
 
+        public List<Client> GetNewestClients(int amount)
+        {
+            return uow.Clients.FindNewest(amount).ToList();
+        }
+
         public void AddCar(string brand, string type, string color, double priceFirst, double priceNight, double priceWedding, double priceWellness, bool available)
         {
             if(string.IsNullOrWhiteSpace(brand) || string.IsNullOrWhiteSpace(brand)) throw new DomainException("Brand and type cant't be empty");

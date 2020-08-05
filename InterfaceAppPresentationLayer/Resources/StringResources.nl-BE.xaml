@@ -26,6 +26,15 @@
     <system:String x:Key="settings_controls_dark_header">Donkere Modus</system:String>
     <system:String x:Key="settings_controls_language_header">Taal</system:String>
 
-    <system:String x:Key="new_client_submit">Nieuwe Klant</system:String>
+    <system:String x:Key="new_client_submit">Voeg Klant Toe</system:String>
+
+    <system:String x:Key="new_reservation_client">Klant</system:String>
+    <system:String x:Key="new_reservation_arrangement">Arrangement</system:String>
+    <system:String x:Key="new_reservation_from_date">Datum Van</system:String>
+    <system:String x:Key="new_reservation_from_time">Tijd Van</system:String>
+    <system:String x:Key="new_reservation_until_date">Datum Tot</system:String>
+    <system:String x:Key="new_reservation_until_time">Tijd Tot</system:String>
+    <system:String x:Key="new_reservation_available_cars">Beschikbare Voertuigen</system:String>
+    <system:String x:Key="new_reservation_submit">Voeg Reservatie Toe</system:String>
 
 </ResourceDictionary>

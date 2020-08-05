@@ -136,5 +136,16 @@ namespace InterfaceAppPresentationLayer
         {
             return item.Tag as Type;
         }
+
+        public static async void DisplayThrowbackDialog(string title, string message)
+        {
+            ContentDialog errorDialog = new ContentDialog
+            {
+                Title = title,
+                Content = message,
+                CloseButtonText = "Close"
+            };
+            ContentDialogResult result = await errorDialog.ShowAsync();
+        }
     }
 }

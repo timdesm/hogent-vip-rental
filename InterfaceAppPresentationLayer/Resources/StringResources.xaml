@@ -26,6 +26,15 @@
     <system:String x:Key="settings_controls_dark_header">Dark Mode</system:String>
     <system:String x:Key="settings_controls_language_header">Language</system:String>
     
-    <system:String x:Key="new_client_submit">New Client</system:String>
+    <system:String x:Key="new_client_submit">Add Client</system:String>
+
+    <system:String x:Key="new_reservation_client">Client</system:String>
+    <system:String x:Key="new_reservation_arrangement">Arrangement</system:String>
+    <system:String x:Key="new_reservation_from_date">Date From</system:String>
+    <system:String x:Key="new_reservation_from_until">Time From</system:String>
+    <system:String x:Key="new_reservation_until_date">Date Until</system:String>
+    <system:String x:Key="new_reservation_until_time">Time Until</system:String>
+    <system:String x:Key="new_reservation_available_cars">Available Cars</system:String>
+    <system:String x:Key="new_reservation_submit">Add Reservation</system:String>
 
 </ResourceDictionary>

@@ -10,5 +10,6 @@ namespace DomainLayer.Repositories
         void AddCar(Car car);
         IEnumerable<Car> FindAll();
         Car Find(int ID);
+        IEnumerable<Car> CarsAvailable(DateTime from, DateTime until, double hourRange);
     }
 }
