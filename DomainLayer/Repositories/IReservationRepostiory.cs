@@ -8,6 +8,7 @@ namespace DomainLayer.Repositories
     public interface IReservationRepostiory
     {
         void AddReservation(Reservation reservation);
+        IEnumerable<Reservation> FindAll();
         void RemoveReservation(int id);
     }
 }

@@ -28,12 +28,6 @@
                     <DatePicker ui:ControlHelper.Header="From" HorizontalAlignment="Stretch" />
                     <DatePicker ui:ControlHelper.Header="Until" HorizontalAlignment="Stretch" />
                 </ui:SimpleStackPanel>
-
-
-
-
-
-
             </ScrollViewer>
         </Grid>
     </Border>

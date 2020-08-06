@@ -13,5 +13,6 @@ namespace DomainLayer.Repositories
         Client Find(string email);
         IEnumerable<Client> FindNewest(int amount);
         void Remove(int id);
+        int GetYealyReservations(Client client, int year);
     }
 }

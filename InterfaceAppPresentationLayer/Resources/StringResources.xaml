@@ -30,6 +30,8 @@
 
     <system:String x:Key="new_reservation_client">Client</system:String>
     <system:String x:Key="new_reservation_arrangement">Arrangement</system:String>
+    <system:String x:Key="new_reservation_start_location">Pickup Location</system:String>
+    <system:String x:Key="new_reservation_end_location">Return Location</system:String>
     <system:String x:Key="new_reservation_from_date">Date From</system:String>
     <system:String x:Key="new_reservation_from_until">Time From</system:String>
     <system:String x:Key="new_reservation_until_date">Date Until</system:String>

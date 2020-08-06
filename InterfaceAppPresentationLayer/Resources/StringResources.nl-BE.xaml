@@ -30,6 +30,8 @@
 
     <system:String x:Key="new_reservation_client">Klant</system:String>
     <system:String x:Key="new_reservation_arrangement">Arrangement</system:String>
+    <system:String x:Key="new_reservation_start_location">Ophaal Locatie</system:String>
+    <system:String x:Key="new_reservation_end_location">Inlever Locatie</system:String>
     <system:String x:Key="new_reservation_from_date">Datum Van</system:String>
     <system:String x:Key="new_reservation_from_time">Tijd Van</system:String>
     <system:String x:Key="new_reservation_until_date">Datum Tot</system:String>

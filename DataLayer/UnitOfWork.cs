@@ -13,6 +13,7 @@ namespace DataLayer
         {
             this.context = context;
             Cars = new CarRepository(context);
+            CarReservations = new CarReservationRepository(context);
             Clients = new ClientRepository(context);
             InvoiceItems = new InvoiceItemRepository(context);
             Invoices = new InvoiceRepository(context);
@@ -20,6 +21,7 @@ namespace DataLayer
         }
 
         public ICarRepository Cars { get; set; }
+        public ICarReservationRepository CarReservations { get; set; }
         public IClientRepository Clients { get; set; }
         public IInvoiceItemRepository InvoiceItems { get; set; }
         public IInvoiceRepository Invoices { get; set; }
@@ -33,7 +35,7 @@ namespace DataLayer
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 

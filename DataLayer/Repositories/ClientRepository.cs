@@ -45,5 +45,10 @@ namespace DataLayer.Repositories
         {
             context.Clients.Remove(new Client() { ID = id });
         }
+
+        public int GetYealyReservations(Client client, int year)
+        {
+            return context.Reservations.Where(r => r.Client == client && r.ReservationDate.Year == year).Count();
+        }
     }
 }
