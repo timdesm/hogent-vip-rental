@@ -22,7 +22,7 @@
 
                         <ComboBox ui:ControlHelper.Header="{DynamicResource new_reservation_client}" x:Name="inClient" HorizontalAlignment="Stretch" IsTextSearchEnabled="True" />
 
-                        <ComboBox ui:ControlHelper.Header="{DynamicResource new_reservation_arrangement}" x:Name="inArrangement" HorizontalAlignment="Stretch" />
+                        <ComboBox ui:ControlHelper.Header="{DynamicResource new_reservation_arrangement}"  x:Name="inArrangement" HorizontalAlignment="Stretch" />
 
                         <Grid VerticalAlignment="Top">
                             <Grid.ColumnDefinitions>
@@ -35,8 +35,8 @@
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
-                                <DatePicker ui:ControlHelper.Header="{DynamicResource new_reservation_from_date}" HorizontalAlignment="Stretch" x:Name="inFromDate" Margin="0,0,2,0" />
-                                <ComboBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource new_reservation_from_time}" x:Name="inFromTime" HorizontalAlignment="Stretch" Margin="2,0,0,0" />
+                                <DatePicker ui:ControlHelper.Header="{DynamicResource new_reservation_from_date}" FirstDayOfWeek="Monday" HorizontalAlignment="Stretch" x:Name="inFromDate" Margin="0,0,2,0" SelectedDateChanged="inFromDate_SelectedDateChanged" />
+                                <ComboBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource new_reservation_from_time}" x:Name="inFromTime" HorizontalAlignment="Stretch" Margin="2,0,0,0" SelectionChanged="inFromTime_SelectionChanged"/>
                             </Grid>
 
                             <Grid Grid.Column="1" VerticalAlignment="Top" Margin="5,0,0,0">
@@ -44,20 +44,15 @@
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
-                                <DatePicker ui:ControlHelper.Header="{DynamicResource new_reservation_until_date}" HorizontalAlignment="Stretch" x:Name="inUntilDate" Margin="0,0,2,0" />
-                                <ComboBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource new_reservation_until_time}" x:Name="inUntilTime" HorizontalAlignment="Stretch" Margin="2,0,0,0" />
+                                <DatePicker ui:ControlHelper.Header="{DynamicResource new_reservation_until_date}" FirstDayOfWeek="Monday" HorizontalAlignment="Stretch" x:Name="inUntilDate" Margin="0,0,2,0" SelectedDateChanged="inUntilDate_SelectedDateChanged" IsEnabled="False" />
+                                <ComboBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource new_reservation_until_time}" x:Name="inUntilTime" HorizontalAlignment="Stretch" Margin="2,0,0,0" SelectionChanged="inUntilTime_SelectionChanged" />
                             </Grid>
                         </Grid>
 
                         <TextBlock Text="{DynamicResource new_reservation_available_cars}" />
 
-                        <DataGrid x:Name="AvailableCars" SelectionMode="Extended">
-                            <DataGrid.RowStyle>
-                                <Style TargetType="{x:Type DataGridRow}">
-                                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                </Style>
-                            </DataGrid.RowStyle>
-                        </DataGrid>
+                        <DataGrid x:Name="AvailableCars" SelectionMode="Extended" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+                      
 
                         <Button x:Name="Submit" Content="{DynamicResource new_reservation_submit}" Height="32" Width="267" HorizontalAlignment="Left" Style="{StaticResource AccentButtonStyle}" Click="Submit_Click" Margin="0,15,0,0"  />
                     </ui:SimpleStackPanel>

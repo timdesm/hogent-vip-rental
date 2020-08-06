@@ -50,5 +50,10 @@ namespace DomainLayer.Domain
         {
             return uow.Cars.FindAll().ToList();
         }
+
+        public List<Car> GetAvailableCars(DateTime from, DateTime until, double hourRange)
+        {
+            return uow.Cars.CarsAvailable(from, until, hourRange).ToList();
+        }
     }
 }
