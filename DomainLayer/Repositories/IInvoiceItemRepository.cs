@@ -8,5 +8,8 @@ namespace DomainLayer.Repositories
     public interface IInvoiceItemRepository
     {
         void AddInvoiceItem(InvoiceItem invoiceItem);
+        InvoiceItem Find(int ID);
+        IEnumerable<InvoiceItem> FindInvoiceItems(int invoiceID);
+        void RemoveInvoiceItem(int id);
     }
 }

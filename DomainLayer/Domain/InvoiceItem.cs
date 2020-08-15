@@ -9,12 +9,13 @@ namespace DomainLayer.Domain
      public class InvoiceItem
      {
         public InvoiceItem() { }
-        public InvoiceItem(int amount, string description, double unitPrice, double total)
+        public InvoiceItem(int amount, string description, double unitPrice, double total, int invoiceID)
         {
             Amount = amount;
             Description = description;
             UnitPrice = unitPrice;
             Total = total;
+            InvoiceID = invoiceID;
         }
 
         [Key]
@@ -24,10 +25,12 @@ namespace DomainLayer.Domain
         public string Description { get; set; }
         public double UnitPrice { get; set; }
         public double Total { get; set; }
+        [ForeignKey("Invoice")]
+        public int InvoiceID { get; set; }
 
         public override string ToString()
         {
-            return $"InvoiceItem : {ID},{Amount},{Description},{UnitPrice},{Total}";
+            return $"InvoiceItem : {ID},{Amount},{Description},{UnitPrice},{Total},{InvoiceID}";
         }
      }
 }

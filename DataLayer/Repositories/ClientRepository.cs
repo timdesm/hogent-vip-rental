@@ -41,7 +41,7 @@ namespace DataLayer.Repositories
             return (from c in context.Clients orderby c.ID descending select c).Take(amount);
         }
 
-        public void Remove(int id)
+        public void RemoveClient(int id)
         {
             context.Clients.Remove(new Client() { ID = id });
         }

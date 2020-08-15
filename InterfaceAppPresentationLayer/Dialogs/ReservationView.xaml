@@ -1,0 +1,69 @@
+﻿<ui:ContentDialog 
+      x:Class="InterfaceAppPresentationLayer.Dialogs.ReservationView"
+      xmlns:ui="http://schemas.modernwpf.com/2019" 
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Placeholder"
+      SecondaryButtonText="{DynamicResource general_edit}"
+      CloseButtonText="{DynamicResource general_close}">
+
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBox ui:ControlHelper.Header="{DynamicResource reservation_client}" x:Name="Client" IsEnabled="False" Margin="0,0,5,0" />
+            <Button Grid.Column="1" Content="{DynamicResource general_view}" Margin="5,23,0,0" VerticalAlignment="Top" />
+        </Grid>
+        <TextBox ui:ControlHelper.Header="{DynamicResource reservation_arrangement}" x:Name="Arrangement" IsEnabled="False" />
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBox ui:ControlHelper.Header="{DynamicResource reservation_start_location}" x:Name="StartLocation" IsEnabled="False" Margin="0,0,5,0" />
+            <TextBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource reservation_end_location}" x:Name="EndLocation" IsEnabled="False" Margin="5,0,0,0" />
+        </Grid>
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBox ui:ControlHelper.Header="{DynamicResource reservation_from}" x:Name="From" IsEnabled="False" Margin="0,0,5,0" />
+            <TextBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource reservation_until}" x:Name="Until" IsEnabled="False" Margin="5,0,0,0" />
+        </Grid>
+
+        <TextBox ui:ControlHelper.Header="{DynamicResource reservation_returned}" x:Name="Returned" IsEnabled="False" Visibility="Collapsed" />
+
+        <TextBlock Text="{DynamicResource reservation_cars}" />
+        <DataGrid x:Name="CarTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Resources>
+                <ContextMenu x:Key="rowContextMenu">
+                    <MenuItem Header="{DynamicResource general_view}" Click="CarMenu_View">
+                        <MenuItem.Icon>
+                            <ui:FontIcon Glyph="&#xe1a3;" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource rowContextMenu}" />
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+    </StackPanel>
+</ui:ContentDialog>

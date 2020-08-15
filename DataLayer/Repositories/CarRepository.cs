@@ -39,5 +39,10 @@ namespace DataLayer.Repositories
             List<Car> reservedCars = context.CarReservations.Where(c => reservations.Contains(c.Reservation)).Select(c => c.Car).ToList();
             return context.Cars.Where(c => c.Available).Where(c => !reservedCars.Contains(c)).AsEnumerable<Car>();
         }
+
+        public void RemoveCar(int id)
+        {
+            context.Cars.Remove(new Car() { ID = id });
+        }
     }
 }

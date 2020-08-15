@@ -13,6 +13,7 @@ namespace DomainLayer.Domain
         public Invoice(Client client, DateTime invoiceDate, List<InvoiceItem> items, double discountPercent, double vatPercent)
         {
             Client = client;
+            ClientID = client.ID;
             InvoiceDate = invoiceDate;
             Items = items;
             DiscountPercent = discountPercent;
@@ -32,11 +33,12 @@ namespace DomainLayer.Domain
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        [ForeignKey("Client")]
+        public int ClientID { get; set; }
         public Client Client { get; set; }
+
         public DateTime InvoiceDate { get; set; }
-
         public IList<InvoiceItem> Items { get; set; }
-
         public double DiscountPercent { get; set; }
         public double Discount { get; set; }
         public double VATPercent { get; set; }

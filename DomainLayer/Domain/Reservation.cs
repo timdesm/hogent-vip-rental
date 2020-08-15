@@ -9,9 +9,11 @@ namespace DomainLayer.Domain
     public class Reservation
     {
         public Reservation() { }
+
         public Reservation(Client client, List<CarReservation> carReservations, DateTime orderDate, DateTime reservationDate, string startLocation, string endLocation, ReservationArrangementType arrangement, DateTime reservedUntil, DateTime reservationEnded, Invoice invoice)
         {
             Client = client;
+            ClientID = client.ID;
             CarReservations = carReservations;
             OrderDate = orderDate;
             ReservationDate = reservationDate;
@@ -20,12 +22,14 @@ namespace DomainLayer.Domain
             Arrangement = arrangement;
             ReservedUntil = reservedUntil;
             ReservationEnded = reservationEnded;
-            Invoice = invoice;
+            InvoiceID = invoice.ID;
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        [ForeignKey("Client")]
+        public int ClientID { get; set; }
         public Client Client { get; set; }
         public IList<CarReservation> CarReservations { get; set; }
         public DateTime OrderDate { get; set; }
@@ -35,11 +39,12 @@ namespace DomainLayer.Domain
         public ReservationArrangementType Arrangement { get; set; }
         public DateTime ReservedUntil { get; set; }
         public DateTime ReservationEnded { get; set; }
-        public Invoice Invoice { get; set; }
+        public int InvoiceID { get; set; }
+        
 
         public override string ToString()
         {
-            return $"Reservation : {ID},{Client},{CarReservations},{OrderDate},{ReservationDate},{StartLocation},{EndLocation},{Arrangement},{ReservedUntil},{ReservationEnded},{Invoice}";
+            return $"Reservation : {ID},{Client},{CarReservations},{OrderDate},{ReservationDate},{StartLocation},{EndLocation},{Arrangement},{ReservedUntil},{ReservationEnded},{InvoiceID}";
         }
     }
 }

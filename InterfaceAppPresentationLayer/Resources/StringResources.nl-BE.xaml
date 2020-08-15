@@ -3,6 +3,11 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <system:String x:Key="general_reset">Reset</system:String>
+    <system:String x:Key="general_edit">Bewerken</system:String>
+    <system:String x:Key="general_view">Bekijken</system:String>
+    <system:String x:Key="general_delete">Verwijderen</system:String>
+    <system:String x:Key="general_close">Sluiten</system:String>
+    <system:String x:Key="general_cancel">Anuleren</system:String>
 
     <system:String x:Key="home_title">Home</system:String>
     <system:String x:Key="clients_title">Klanten</system:String>
@@ -38,5 +43,27 @@
     <system:String x:Key="new_reservation_until_time">Tijd Tot</system:String>
     <system:String x:Key="new_reservation_available_cars">Beschikbare Voertuigen</system:String>
     <system:String x:Key="new_reservation_submit">Voeg Reservatie Toe</system:String>
+
+    <system:String x:Key="reservation_client">Klant</system:String>
+    <system:String x:Key="reservation_arrangement">Arrangement</system:String>
+    <system:String x:Key="reservation_start_location">Ophaal Locatie</system:String>
+    <system:String x:Key="reservation_end_location">Inlever Locatie</system:String>
+    <system:String x:Key="reservation_from">Van</system:String>
+    <system:String x:Key="reservation_until">Tot</system:String>
+    <system:String x:Key="reservation_returned">Ingeleverd</system:String>
+    <system:String x:Key="reservation_cars">Voertuigen</system:String>
+
+    <system:String x:Key="car_brand">Merk</system:String>
+    <system:String x:Key="car_model">Model</system:String>
+    <system:String x:Key="car_color">Kleur</system:String>
+    <system:String x:Key="cars_price_first">Prijs Eerste Uur</system:String>
+    <system:String x:Key="cars_price_night">Nachtprijs</system:String>
+    <system:String x:Key="cars_price_wedding">Prijs Trouw</system:String>
+    <system:String x:Key="cars_price_wellness">Prijs Wellness</system:String>
+    <system:String x:Key="cars_available">Beschikbaar</system:String>
+    <system:String x:Key="cars_times_reserved">Aantal Gereserveerd</system:String>
+
+    <system:String x:Key="delete_title">Verwijder {type} permanent?</system:String>
+    <system:String x:Key="delete_content">Als u dit verwijdert, kunt u het niet meer herstellen. Wilt u deze verwijderen?</system:String>
 
 </ResourceDictionary>

@@ -58,7 +58,7 @@ namespace DataLayer.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientID = table.Column<int>(nullable: true),
+                    ClientID = table.Column<int>(nullable: false),
                     InvoiceDate = table.Column<DateTime>(nullable: false),
                     DiscountPercent = table.Column<double>(nullable: false),
                     Discount = table.Column<double>(nullable: false),
@@ -77,7 +77,34 @@ namespace DataLayer.Migrations
                         column: x => x.ClientID,
                         principalTable: "Clients",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientID = table.Column<int>(nullable: false),
+                    OrderDate = table.Column<DateTime>(nullable: false),
+                    ReservationDate = table.Column<DateTime>(nullable: false),
+                    StartLocation = table.Column<string>(nullable: true),
+                    EndLocation = table.Column<string>(nullable: true),
+                    Arrangement = table.Column<int>(nullable: false),
+                    ReservedUntil = table.Column<DateTime>(nullable: false),
+                    ReservationEnded = table.Column<DateTime>(nullable: false),
+                    InvoiceID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Clients_ClientID",
+                        column: x => x.ClientID,
+                        principalTable: "Clients",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +117,7 @@ namespace DataLayer.Migrations
                     Description = table.Column<string>(nullable: true),
                     UnitPrice = table.Column<double>(nullable: false),
                     Total = table.Column<double>(nullable: false),
-                    InvoiceID = table.Column<int>(nullable: true)
+                    InvoiceID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,40 +127,7 @@ namespace DataLayer.Migrations
                         column: x => x.InvoiceID,
                         principalTable: "Invoices",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Reservations",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientID = table.Column<int>(nullable: true),
-                    OrderDate = table.Column<DateTime>(nullable: false),
-                    ReservationDate = table.Column<DateTime>(nullable: false),
-                    StartLocation = table.Column<string>(nullable: true),
-                    EndLocation = table.Column<string>(nullable: true),
-                    Arrangement = table.Column<int>(nullable: false),
-                    ReservedUntil = table.Column<DateTime>(nullable: false),
-                    ReservationEnded = table.Column<DateTime>(nullable: false),
-                    InvoiceID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reservations", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Clients_ClientID",
-                        column: x => x.ClientID,
-                        principalTable: "Clients",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Invoices_InvoiceID",
-                        column: x => x.InvoiceID,
-                        principalTable: "Invoices",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,11 +173,6 @@ namespace DataLayer.Migrations
                 name: "IX_Reservations_ClientID",
                 table: "Reservations",
                 column: "ClientID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservations_InvoiceID",
-                table: "Reservations",
-                column: "InvoiceID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

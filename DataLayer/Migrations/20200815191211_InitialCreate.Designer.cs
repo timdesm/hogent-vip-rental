@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(RentalContext))]
-    [Migration("20200728163248_InitialCreate")]
+    [Migration("20200815191211_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,7 +130,7 @@ namespace DataLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ClientID")
+                    b.Property<int>("ClientID")
                         .HasColumnType("int");
 
                     b.Property<double>("Discount")
@@ -180,7 +180,7 @@ namespace DataLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InvoiceID")
+                    b.Property<int>("InvoiceID")
                         .HasColumnType("int");
 
                     b.Property<double>("Total")
@@ -206,13 +206,13 @@ namespace DataLayer.Migrations
                     b.Property<int>("Arrangement")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ClientID")
+                    b.Property<int>("ClientID")
                         .HasColumnType("int");
 
                     b.Property<string>("EndLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InvoiceID")
+                    b.Property<int>("InvoiceID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -233,8 +233,6 @@ namespace DataLayer.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("ClientID");
-
-                    b.HasIndex("InvoiceID");
 
                     b.ToTable("Reservations");
                 });
@@ -258,25 +256,27 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DomainLayer.Domain.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientID");
+                        .HasForeignKey("ClientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLayer.Domain.InvoiceItem", b =>
                 {
                     b.HasOne("DomainLayer.Domain.Invoice", null)
                         .WithMany("Items")
-                        .HasForeignKey("InvoiceID");
+                        .HasForeignKey("InvoiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLayer.Domain.Reservation", b =>
                 {
                     b.HasOne("DomainLayer.Domain.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientID");
-
-                    b.HasOne("DomainLayer.Domain.Invoice", "Invoice")
-                        .WithMany()
-                        .HasForeignKey("InvoiceID");
+                        .HasForeignKey("ClientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

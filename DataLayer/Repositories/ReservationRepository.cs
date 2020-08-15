@@ -21,6 +21,11 @@ namespace DataLayer.Repositories
             context.Reservations.Add(reservation);
         }
 
+        public Reservation Find(int id)
+        {
+            return context.Reservations.Where(r => r.ID == id).Single();
+        }
+
         public IEnumerable<Reservation> FindAll()
         {
             return context.Reservations.OrderBy(r => r.ID).AsEnumerable<Reservation>();
@@ -28,7 +33,7 @@ namespace DataLayer.Repositories
 
         public void RemoveReservation(int id)
         {
-
+            context.Reservations.Remove(new Reservation() { ID = id });
         }
     }
 }

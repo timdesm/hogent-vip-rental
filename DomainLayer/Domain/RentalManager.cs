@@ -18,8 +18,8 @@ namespace DomainLayer.Domain
 
         public void AddClient(string firstName, string lastName, string email, string phone, string addStreet, string addNumber, string addBox, string addZip, string addCity, string addCountry, ClientType type, string company, string vatNumber)
         {
-            if(firstName == null || lastName == null) throw new DomainException("First and Last name can't be empty");
-            if (email != null) if (!RegexUtilities.IsValidEmail(email)) throw new DomainException("Email invalid value");
+            if(String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName)) throw new DomainException("First and Last name can't be empty");
+            if (!String.IsNullOrWhiteSpace(email)) if (!RegexUtilities.IsValidEmail(email)) throw new DomainException("Email invalid value");
             if(!RegexUtilities.IsValidPhoneNumber(phone, false)) throw new DomainException("Phone invalid value");
             if (type != ClientType.PRIVATE && type != ClientType.VIP) if(vatNumber == null) throw new DomainException("VAT Number can't be empty for that account type");
             if (type == ClientType.PRIVATE || type == ClientType.VIP) if (vatNumber != null) { vatNumber = ""; company = ""; }
@@ -41,6 +41,24 @@ namespace DomainLayer.Domain
         public Client GetClient(int id)
         {
             return uow.Clients.Find(id);
+        }
+
+        public Invoice GetInvoice(int id)
+        {
+            return uow.Invoices.Find(id);
+        }
+
+        public Reservation GetReservation(int id)
+        {
+            return uow.Reservations.Find(id);
+        }
+
+        public List<Car> GetReservationCars(int reservationID)
+        {
+            List<Car> cars = new List<Car>();
+            foreach(CarReservation cr in uow.CarReservations.ReservationCars(reservationID).ToList())
+                cars.Add(uow.Cars.Find(cr.CarID));
+            return cars;
         }
 
         public void AddCar(string brand, string type, string color, double priceFirst, double priceNight, double priceWedding, double priceWellness, bool available)
@@ -72,6 +90,20 @@ namespace DomainLayer.Domain
             return uow.Reservations.FindAll().ToList();
         }
 
+        public void RemoveReservation(int id)
+        {
+            Reservation reservation = uow.Reservations.Find(id);
+            List<CarReservation> carReservations = uow.CarReservations.ReservationCars(id).ToList();
+            foreach (CarReservation cr in carReservations)
+                uow.CarReservations.RemoveCarReservation(cr);
+            List<InvoiceItem> invoiceItems = uow.InvoiceItems.FindInvoiceItems(reservation.InvoiceID).ToList();
+            foreach (InvoiceItem ii in invoiceItems)
+                uow.InvoiceItems.RemoveInvoiceItem(ii.ID);
+            uow.Invoices.RemoveInvoice(reservation.InvoiceID);
+            uow.Reservations.RemoveReservation(id);
+            uow.Complete();
+        }
+
         public void AddReservation(Client client, ReservationArrangementType arrangement, DateTime from, DateTime until, String startLocation, String endLocation, List<Car> cars, DateTime orderDate, Double vatPercent)
         {
             if(from == null || until == null) throw new DomainException("The pickup and return dates must be given");
@@ -85,6 +117,10 @@ namespace DomainLayer.Domain
             if (arrangement == ReservationArrangementType.WELLNESS && !IsBetweenTimes(from, TimeSpan.FromHours(7), TimeSpan.FromHours(12))) throw new DomainException("Wellness arragement must start between 07:00 and 12:00");
             if (cars.Count <= 0) throw new DomainException("You must select at least one car");
 
+            Invoice invoice = new Invoice(client, orderDate, new List<InvoiceItem>(), GetDiscount(client), vatPercent);
+            uow.Invoices.AddInvoice(invoice);
+            uow.Complete();
+
             List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
             foreach(Car car in cars)
             {
@@ -95,26 +131,25 @@ namespace DomainLayer.Domain
                 {
                     case ReservationArrangementType.NIGHT:
                         if(car.PriceNight <= 0) throw new DomainException("Car with ID " + car.ID + " can't be booked for the night arragement");
-                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ") - Night", price, price);
+                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ") - Night", price, price, invoice.ID);
                         break;
                     case ReservationArrangementType.WEDDING:
                         if (car.PriceWedding <= 0) throw new DomainException("Car with ID " + car.ID + " can't be booked for the wedding arragement");
-                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ") - Wedding", price, price);
+                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ") - Wedding", price, price, invoice.ID);
                         break;
                     case ReservationArrangementType.WELLNESS:
                         if (car.PriceWellness <= 0) throw new DomainException("Car with ID " + car.ID + " can't be booked for the wellness arragement");
-                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ") - Wellness", price, price);
+                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ") - Wellness", price, price, invoice.ID);
                         break;
                     default: 
-                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ")", price, price);
+                        ii = new InvoiceItem(1, "#" + car.ID + " " + car.Brand + " " + car.Type + " (" + car.Color + ")", price, price, invoice.ID);
                         break;
                 }
                 uow.InvoiceItems.AddInvoiceItem(ii);
                 invoiceItems.Add(ii);
             }
 
-            Invoice invoice = new Invoice(client, orderDate, invoiceItems, GetDiscount(client), vatPercent);
-            uow.Invoices.AddInvoice(invoice);
+            invoice.Items = invoiceItems;
 
             Reservation reservation = new Reservation(client, new List<CarReservation>(), orderDate, from, startLocation, endLocation, arrangement, until, DateTime.MinValue, invoice);
             uow.Reservations.AddReservation(reservation);

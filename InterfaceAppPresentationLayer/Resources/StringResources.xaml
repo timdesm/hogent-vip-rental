@@ -3,6 +3,11 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <system:String x:Key="general_reset">Reset</system:String>
+    <system:String x:Key="general_edit">Edit</system:String>
+    <system:String x:Key="general_view">View</system:String>
+    <system:String x:Key="general_delete">Delete</system:String>
+    <system:String x:Key="general_close">Close</system:String>
+    <system:String x:Key="general_cancel">Cancel</system:String>
 
     <system:String x:Key="home_title">Home</system:String>
     <system:String x:Key="clients_title">Clients</system:String>
@@ -38,5 +43,28 @@
     <system:String x:Key="new_reservation_until_time">Time Until</system:String>
     <system:String x:Key="new_reservation_available_cars">Available Cars</system:String>
     <system:String x:Key="new_reservation_submit">Add Reservation</system:String>
+
+    <system:String x:Key="reservation_client">Client</system:String>
+    <system:String x:Key="reservation_arrangement">Arrangement</system:String>
+    <system:String x:Key="reservation_start_location">Pickup</system:String>
+    <system:String x:Key="reservation_end_location">Return</system:String>
+    <system:String x:Key="reservation_from">From</system:String>
+    <system:String x:Key="reservation_until">Until</system:String>
+    <system:String x:Key="reservation_returned">Returned</system:String>
+    <system:String x:Key="reservation_cars">Vehicles</system:String>
+
+    <system:String x:Key="car_brand">Brand</system:String>
+    <system:String x:Key="car_model">Model</system:String>
+    <system:String x:Key="car_color">Color</system:String>
+    <system:String x:Key="car_brand">Brand</system:String>
+    <system:String x:Key="cars_price_first">Price First Hour</system:String>
+    <system:String x:Key="cars_price_night">Pirce Night</system:String>
+    <system:String x:Key="cars_price_wedding">Pirce Wedding</system:String>
+    <system:String x:Key="cars_price_wellness">Pirce Wellness</system:String>
+    <system:String x:Key="cars_available">Available</system:String>
+    <system:String x:Key="cars_times_reserved">Times Reserved</system:String>
+
+    <system:String x:Key="delete_title">Delete {type} permanently?</system:String>
+    <system:String x:Key="delete_content">If you delete this, you won't able to recover it. Do you want to delete it?</system:String>
 
 </ResourceDictionary>

@@ -17,7 +17,32 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <DataGrid x:Name="DataTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+            <DataGrid x:Name="DataTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                <DataGrid.Resources>
+                    <ResourceDictionary>
+                        <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{x:Null}" />
+                                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{x:Null}" />
+                                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ResourceDictionary>
+                </DataGrid.Resources>
+            </DataGrid>
 
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" Padding="12,12,12,12" Margin="20,0,0,0">
                 <ui:SimpleStackPanel>

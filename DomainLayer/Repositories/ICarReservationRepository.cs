@@ -8,5 +8,7 @@ namespace DomainLayer.Repositories
     public interface ICarReservationRepository
     {
         void AddCarReservation(CarReservation carReservation);
+        IEnumerable<CarReservation> ReservationCars(int reservationID);
+        void RemoveCarReservation(CarReservation carReservation);
     }
 }

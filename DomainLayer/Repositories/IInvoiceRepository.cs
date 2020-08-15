@@ -8,5 +8,7 @@ namespace DomainLayer.Repositories
     public interface IInvoiceRepository
     {
         void AddInvoice(Invoice invoice);
+        Invoice Find(int ID);
+        void RemoveInvoice(int id);
     }
 }

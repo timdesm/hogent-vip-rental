@@ -1,0 +1,29 @@
+﻿<ui:ContentDialog 
+      x:Class="InterfaceAppPresentationLayer.Dialogs.CarView"
+      xmlns:ui="http://schemas.modernwpf.com/2019" 
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Placeholder"
+      SecondaryButtonText="{DynamicResource general_edit}"
+      CloseButtonText="{DynamicResource general_close}">
+
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TextBox ui:ControlHelper.Header="{DynamicResource car_brand}" x:Name="Brand" IsEnabled="False" />
+        <TextBox ui:ControlHelper.Header="{DynamicResource car_model}" x:Name="Model" IsEnabled="False" />
+        <TextBox ui:ControlHelper.Header="{DynamicResource car_color}" x:Name="Color" IsEnabled="False"/>
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBox ui:ControlHelper.Header="{DynamicResource cars_price_first}" x:Name="PriceFirst" IsEnabled="False" Margin="0,0,5,0" />
+            <TextBox Grid.Column="1" ui:ControlHelper.Header="{DynamicResource cars_price_night}" x:Name="PriceNight" IsEnabled="False" Margin="5,0,5,0" />
+            <TextBox Grid.Column="2" ui:ControlHelper.Header="{DynamicResource cars_price_wedding}" x:Name="PriceWedding" IsEnabled="False" Margin="5,0,5,0" />
+            <TextBox Grid.Column="3" ui:ControlHelper.Header="{DynamicResource cars_price_wellness}" x:Name="PriceWellness" IsEnabled="False" Margin="5,0,0,0" />
+        </Grid>
+        <ui:ToggleSwitch x:Name="Available" Header="{DynamicResource cars_available}" IsEnabled="False" />
+    </StackPanel>
+
+</ui:ContentDialog>

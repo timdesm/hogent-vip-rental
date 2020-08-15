@@ -11,5 +11,6 @@ namespace DomainLayer.Repositories
         IEnumerable<Car> FindAll();
         Car Find(int ID);
         IEnumerable<Car> CarsAvailable(DateTime from, DateTime until, double hourRange);
+        void RemoveCar(int id);
     }
 }

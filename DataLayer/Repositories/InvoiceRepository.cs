@@ -2,6 +2,7 @@
 using DomainLayer.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DataLayer.Repositories
@@ -18,6 +19,16 @@ namespace DataLayer.Repositories
         public void AddInvoice(Invoice invoice)
         {
             context.Invoices.Add(invoice);
+        }
+
+        public Invoice Find(int ID)
+        {
+            return context.Invoices.Where(i => i.ID == ID).Single();
+        }
+
+        public void RemoveInvoice(int id)
+        {
+            context.Invoices.Remove(new Invoice() { ID = id });
         }
     }
 }

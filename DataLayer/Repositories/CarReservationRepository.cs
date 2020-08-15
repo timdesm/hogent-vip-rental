@@ -2,6 +2,7 @@
 using DomainLayer.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DataLayer.Repositories
@@ -18,6 +19,16 @@ namespace DataLayer.Repositories
         public void AddCarReservation(CarReservation carReservation)
         {
             context.CarReservations.Add(carReservation);
+        }
+
+        public IEnumerable<CarReservation> ReservationCars(int reservationID)
+        {
+            return context.CarReservations.Where(c => c.ReservationID == reservationID).AsEnumerable<CarReservation>();
+        }
+
+        public void RemoveCarReservation(CarReservation carReservation)
+        {
+            context.CarReservations.Remove(carReservation);
         }
     }
 }
