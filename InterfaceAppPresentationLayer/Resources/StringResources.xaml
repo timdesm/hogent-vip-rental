@@ -8,6 +8,7 @@
     <system:String x:Key="general_delete">Delete</system:String>
     <system:String x:Key="general_close">Close</system:String>
     <system:String x:Key="general_cancel">Cancel</system:String>
+    <system:String x:Key="general_save">Save</system:String>
 
     <system:String x:Key="home_title">Home</system:String>
     <system:String x:Key="clients_title">Clients</system:String>
@@ -52,17 +53,42 @@
     <system:String x:Key="reservation_until">Until</system:String>
     <system:String x:Key="reservation_returned">Returned</system:String>
     <system:String x:Key="reservation_cars">Vehicles</system:String>
+    <system:String x:Key="reservation_invoice">Invoice</system:String>
+
+    <system:String x:Key="invoice_id">Invoice Number</system:String>
+    <system:String x:Key="invoice_date">Generation Date</system:String>
+    <system:String x:Key="invoice_discount_percent">Discount Percent</system:String>
+    <system:String x:Key="invoice_discount">Discount</system:String>
+    <system:String x:Key="invoice_totalexc">Total Exc.</system:String>
+    <system:String x:Key="invoice_vat">VAT</system:String>
+    <system:String x:Key="invoice_totalinc">Total Inc.</system:String>
+    <system:String x:Key="invoice_due">Payment Due</system:String>
+    <system:String x:Key="invoice_status">Status</system:String>
 
     <system:String x:Key="car_brand">Brand</system:String>
     <system:String x:Key="car_model">Model</system:String>
     <system:String x:Key="car_color">Color</system:String>
-    <system:String x:Key="car_brand">Brand</system:String>
     <system:String x:Key="cars_price_first">Price First Hour</system:String>
     <system:String x:Key="cars_price_night">Pirce Night</system:String>
     <system:String x:Key="cars_price_wedding">Pirce Wedding</system:String>
     <system:String x:Key="cars_price_wellness">Pirce Wellness</system:String>
     <system:String x:Key="cars_available">Available</system:String>
     <system:String x:Key="cars_times_reserved">Times Reserved</system:String>
+
+    <system:String x:Key="client_first_name">First Name</system:String>
+    <system:String x:Key="client_last_name">Last Name</system:String>
+    <system:String x:Key="client_email">Email</system:String>
+    <system:String x:Key="client_phone">Phone</system:String>
+    <system:String x:Key="client_address_street">Street</system:String>
+    <system:String x:Key="client_address_number">House Number</system:String>
+    <system:String x:Key="client_address_box">Box</system:String>
+    <system:String x:Key="client_address_city">City</system:String>
+    <system:String x:Key="client_address_zip">Zip Code</system:String>
+    <system:String x:Key="client_address_country">Country</system:String>
+    <system:String x:Key="client_type">Account Type</system:String>
+    <system:String x:Key="client_company">Company Name</system:String>
+    <system:String x:Key="client_company">VAT Number</system:String>
+    <system:String x:Key="client_dialog_title">Client #{id}</system:String>
 
     <system:String x:Key="delete_title">Delete {type} permanently?</system:String>
     <system:String x:Key="delete_content">If you delete this, you won't able to recover it. Do you want to delete it?</system:String>

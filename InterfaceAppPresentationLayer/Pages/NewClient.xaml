@@ -48,8 +48,8 @@
                         <ComboBox ui:ControlHelper.Header="Country:" x:Name="inAddrCountry" HorizontalAlignment="Stretch" />
 
                         <ComboBox ui:ControlHelper.Header="Account Type:" x:Name="inAccountType" HorizontalAlignment="Stretch" SelectionChanged="inAccountType_SelectionChanged" />
-                        <TextBox ui:ControlHelper.Header="Company Name:" x:Name="inCompany" Visibility="Hidden" />
-                        <TextBox ui:ControlHelper.Header="VAT Number:" x:Name="inVAT" Visibility="Hidden" />
+                        <TextBox ui:ControlHelper.Header="Company Name:" x:Name="inCompany" Visibility="Collapsed" />
+                        <TextBox ui:ControlHelper.Header="VAT Number:" x:Name="inVAT" Visibility="Collapsed" />
 
                         <Button x:Name="Submit" Content="{DynamicResource new_client_submit}" Height="32" Width="267" HorizontalAlignment="Left" Style="{StaticResource AccentButtonStyle}" Click="Submit_Click" Margin="0,15,0,0"  />
                         <TextBlock x:Name="SubmitThrowback" />

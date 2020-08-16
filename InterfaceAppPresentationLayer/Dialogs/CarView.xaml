@@ -4,7 +4,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="Placeholder"
-      SecondaryButtonText="{DynamicResource general_edit}"
+      PrimaryButtonText="{DynamicResource general_edit}"
       CloseButtonText="{DynamicResource general_close}">
 
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

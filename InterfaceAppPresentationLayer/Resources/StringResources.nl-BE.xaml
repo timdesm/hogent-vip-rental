@@ -8,6 +8,7 @@
     <system:String x:Key="general_delete">Verwijderen</system:String>
     <system:String x:Key="general_close">Sluiten</system:String>
     <system:String x:Key="general_cancel">Anuleren</system:String>
+    <system:String x:Key="general_save">Opslaan</system:String>
 
     <system:String x:Key="home_title">Home</system:String>
     <system:String x:Key="clients_title">Klanten</system:String>
@@ -52,6 +53,17 @@
     <system:String x:Key="reservation_until">Tot</system:String>
     <system:String x:Key="reservation_returned">Ingeleverd</system:String>
     <system:String x:Key="reservation_cars">Voertuigen</system:String>
+    <system:String x:Key="reservation_invoice">Factuur</system:String>
+
+    <system:String x:Key="invoice_id">Factuurnummer</system:String>
+    <system:String x:Key="invoice_date">Aanmaak Datum</system:String>
+    <system:String x:Key="invoice_discount_percent">Kortingspercentage</system:String>
+    <system:String x:Key="invoice_discount">Korting</system:String>
+    <system:String x:Key="invoice_totalexc">Totaal Exc.</system:String>
+    <system:String x:Key="invoice_vat">BTW</system:String>
+    <system:String x:Key="invoice_totalinc">Totaal Inc.</system:String>
+    <system:String x:Key="invoice_due">Verschuldigd</system:String>
+    <system:String x:Key="invoice_status">Status</system:String>
 
     <system:String x:Key="car_brand">Merk</system:String>
     <system:String x:Key="car_model">Model</system:String>
@@ -62,6 +74,21 @@
     <system:String x:Key="cars_price_wellness">Prijs Wellness</system:String>
     <system:String x:Key="cars_available">Beschikbaar</system:String>
     <system:String x:Key="cars_times_reserved">Aantal Gereserveerd</system:String>
+
+    <system:String x:Key="client_first_name">Voornaam</system:String>
+    <system:String x:Key="client_last_name">Achternaam</system:String>
+    <system:String x:Key="client_email">Email</system:String>
+    <system:String x:Key="client_phone">Telefoon Nummer</system:String>
+    <system:String x:Key="client_address_street">Straat</system:String>
+    <system:String x:Key="client_address_number">Huis Nummer</system:String>
+    <system:String x:Key="client_address_box">Bus</system:String>
+    <system:String x:Key="client_address_city">Stad</system:String>
+    <system:String x:Key="client_address_zip">Postcode</system:String>
+    <system:String x:Key="client_address_country">Land</system:String>
+    <system:String x:Key="client_type">Account Type</system:String>
+    <system:String x:Key="client_company">Company Name</system:String>
+    <system:String x:Key="client_vat">VAT Number</system:String>
+    <system:String x:Key="client_dialog_title">Klant #{id}</system:String>
 
     <system:String x:Key="delete_title">Verwijder {type} permanent?</system:String>
     <system:String x:Key="delete_content">Als u dit verwijdert, kunt u het niet meer herstellen. Wilt u deze verwijderen?</system:String>

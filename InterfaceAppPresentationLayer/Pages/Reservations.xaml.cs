@@ -42,6 +42,7 @@ namespace InterfaceAppPresentationLayer.Pages
             Task.Run(() => InitializeDataGrid_Data());
         }
 
+
         private void InitializeDataGrid_Data()
         {
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
@@ -56,7 +57,7 @@ namespace InterfaceAppPresentationLayer.Pages
                 
 
                 String cars = reservationCars.ToString();
-                AddTableRow(reservation.ID, client.FirstName + " " + client.LastName, sb.ToString().Substring(0, sb.ToString().Length - 1), reservation.ReservationDate, reservation.ReservedUntil, reservation.Arrangement.ToString(), reservation.StartLocation, reservation.EndLocation, reservation.OrderDate, invoice.ID, "€" + invoice.TotalInc, (invoice.PaymentDue == 0) ? "Payed" : "Unpaid");
+                AddTableRow(reservation.ID, client.FirstName + " " + client.LastName, sb.ToString().Substring(0, sb.ToString().Length - 1), reservation.ReservationDate, reservation.ReservedUntil, char.ToUpper(reservation.Arrangement.ToString().ToLower()[0]) + reservation.Arrangement.ToString().ToLower().Substring(1), reservation.StartLocation, reservation.EndLocation, reservation.OrderDate, invoice.ID, "€" + invoice.TotalInc, (invoice.PaymentDue == 0) ? "Payed" : "Unpaid");
             }
         }
 
@@ -87,11 +88,6 @@ namespace InterfaceAppPresentationLayer.Pages
             } catch(Exception ex) { }
         }
 
-        private void DataTableAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-
-        }
-
         private void DataGrid_ViewClick(object sender, RoutedEventArgs e)
         {
 
@@ -111,7 +107,9 @@ namespace InterfaceAppPresentationLayer.Pages
             Reservation reservation = manager.GetReservation(reservationID);
             ReservationView dialog = new ReservationView(reservation);
             var result = await dialog.ShowAsync();
-            if(result == ContentDialogResult.Secondary) { }
+            if(result == ContentDialogResult.Primary) { 
+
+            }
                 
         }
 
@@ -125,7 +123,6 @@ namespace InterfaceAppPresentationLayer.Pages
             if (result == ContentDialogResult.Primary) {
                 RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
                 manager.RemoveReservation(reservationID);
-
             }
         }
     }

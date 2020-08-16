@@ -13,7 +13,10 @@ namespace InterfaceAppPresentationLayer.Dialogs
     /// </summary>
     public partial class ReservationView : ContentDialog
     {
+        Client client;
+
         private DataTable carTable;
+        private DataTable invoiceItems;
 
         public ReservationView(Reservation reservation)
         {
@@ -23,8 +26,9 @@ namespace InterfaceAppPresentationLayer.Dialogs
 
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Invoice invoice = manager.GetInvoice(reservation.InvoiceID);
-            Client client = manager.GetClient(reservation.ClientID);
+            client = manager.GetClient(reservation.ClientID);
             List<Car> reservationCars = manager.GetReservationCars(reservation.ID);
+            List<InvoiceItem> invoiceItems = manager.GetInvoiceItems(reservation.InvoiceID);
 
             Client.Text = client.FirstName + " " + client.LastName;
             if(!string.IsNullOrWhiteSpace(client.CompanyName))
@@ -35,8 +39,19 @@ namespace InterfaceAppPresentationLayer.Dialogs
             From.Text = reservation.ReservationDate.ToString();
             Until.Text = reservation.ReservedUntil.ToString();
 
+            InvoiceID.Text = "#" + reservation.InvoiceID;
+            InvoiceDate.Text = invoice.InvoiceDate.ToString();
+            InvoiceDiscountPercent.Text = invoice.DiscountPercent + "%";
+            InvoiceDiscount.Text = string.Format("€{0:0.00}", invoice.Discount);
+            InvoiceTotalExc.Text = string.Format("€{0:0.00}", invoice.TotalExc);
+            InvoiceVAT.Text = string.Format("€{0:0.00}", invoice.VAT);
+            InvoiceTotalInc.Text = string.Format("€{0:0.00}", invoice.TotalInc);
+            InvoiceDue.Text = string.Format("€{0:0.00}", invoice.PaymentDue);
+
             foreach (Car car in reservationCars)
                 AddTableRow(car.ID, car.Brand, car.Type, car.Color, car.Available);
+            foreach (InvoiceItem ii in invoiceItems)
+                AddInvoiceItemsRow(ii.Amount, ii.Description, ii.UnitPrice, ii.Total);
         }
 
         private void InitializeDataGrid()
@@ -49,6 +64,14 @@ namespace InterfaceAppPresentationLayer.Dialogs
             carTable.Columns.Add(new DataColumn("Color", typeof(string)));
             carTable.Columns.Add(new DataColumn("Available", typeof(bool)));
             CarTable.ItemsSource = carTable.DefaultView;
+
+            invoiceItems = new DataTable();
+            invoiceItems.Clear();
+            invoiceItems.Columns.Add(new DataColumn("Amount", typeof(int)));
+            invoiceItems.Columns.Add(new DataColumn("Description", typeof(string)));
+            invoiceItems.Columns.Add(new DataColumn("Unit Price", typeof(string)));
+            invoiceItems.Columns.Add(new DataColumn("Total Price", typeof(string)));
+            InvoiceItems.ItemsSource = invoiceItems.DefaultView;
         }
 
         private void AddTableRow(int id, string brand, string type, string color, bool available)
@@ -62,6 +85,16 @@ namespace InterfaceAppPresentationLayer.Dialogs
             carTable.Rows.Add(row);
         }
 
+        private void AddInvoiceItemsRow(int id, string description, double unitPrice, double totalPrice)
+        {
+            DataRow row = invoiceItems.NewRow();
+            row[0] = id;
+            row[1] = description;
+            row[2] = unitPrice;
+            row[3] = totalPrice;
+            invoiceItems.Rows.Add(row);
+        }
+
         private async void CarMenu_View(object sender, System.Windows.RoutedEventArgs e)
         {
             this.Hide();
@@ -72,6 +105,17 @@ namespace InterfaceAppPresentationLayer.Dialogs
             Car car = manager.GetCar(carID);
             CarView dialog = new CarView(car);
             var result = await dialog.ShowAsync();
+        }
+
+        private async void ClientView_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.Hide();
+            ClientView dialog = new ClientView(client);
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+
+            }
         }
     }
 }
