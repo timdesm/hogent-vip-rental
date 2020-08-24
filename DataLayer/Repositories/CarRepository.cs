@@ -49,5 +49,10 @@ namespace DataLayer.Repositories
         {
             context.Cars.Update(car);
         }
+
+        public Car GetLastCar()
+        {
+            return context.Cars.Last();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DomainLayer.Domain;
+using InterfaceAppPresentationLayer.Classes;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
@@ -137,6 +138,7 @@ namespace InterfaceAppPresentationLayer.Pages
             {
                 RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
                 manager.AddClient(firstName, lastName, email, phone, addrStreet, addrNumber, addrBox, addrZip, addrCity, addrCountry, type, company, vat);
+                MailService.Send_WelcomeMail(email); // Send welcome mail
                 DisplayThrowbackDialog("New client has been added");
             }
             catch(Exception error)

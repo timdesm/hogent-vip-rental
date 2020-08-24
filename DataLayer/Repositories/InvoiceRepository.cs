@@ -21,6 +21,11 @@ namespace DataLayer.Repositories
             context.Invoices.Add(invoice);
         }
 
+        public IEnumerable<Invoice> FindAll()
+        {
+            return context.Invoices.OrderBy(i => i.ID).AsEnumerable<Invoice>();
+        }
+
         public Invoice Find(int ID)
         {
             return context.Invoices.Where(i => i.ID == ID).Single();
@@ -31,9 +36,19 @@ namespace DataLayer.Repositories
             context.Invoices.Remove(new Invoice() { ID = id });
         }
 
+        public void RemoveInvoice(Invoice invoice)
+        {
+            context.Invoices.Remove(invoice);
+        }
+
         public IEnumerable<Invoice> FindUnpaid()
         {
             return context.Invoices.Where(i => i.PaymentDue > 0).AsEnumerable<Invoice>();
+        }
+
+        public Invoice GetLastInvoice()
+        {
+            return context.Invoices.Last();
         }
     }
 }

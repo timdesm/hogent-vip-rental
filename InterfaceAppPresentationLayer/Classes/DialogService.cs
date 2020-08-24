@@ -35,18 +35,17 @@ namespace InterfaceAppPresentationLayer.Classes
                 {
                     if (dialog.Client.SelectedIndex < 0) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must selected a client out of the list"); return; }
                     if (!int.TryParse(dialog.Client.SelectedItem.ToString().Split(" ")[0].Substring(1), out int clientID)) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "Something went wrong while retrieving the client from the list"); return; }
+                    RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+                    List<Car> oldRentedCars = manager.GetReservationCars(reservation.ID);
+                    Client client = manager.GetClient(clientID);
                     if (dialog.Arrangement.SelectedIndex < 0 || !Enum.TryParse(typeof(ReservationArrangementType), dialog.Arrangement.SelectedItem.ToString().ToUpper(), out object typeObj)) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must select a arrangement from the list"); return; }
                     if (dialog.FromDate.SelectedDate == null || dialog.FromTime.SelectedIndex < 0 || !TimeSpan.TryParse(dialog.FromTime.SelectedItem.ToString(), out TimeSpan fromTime)) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must select pickup date and time"); return; }
                     if (dialog.UntilDate.SelectedDate == null || dialog.UntilTime.SelectedIndex < 0 || !TimeSpan.TryParse(dialog.UntilTime.SelectedItem.ToString(), out TimeSpan untilTime)) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must select return date and time"); return; }
                     if (dialog.StartLocation.SelectedIndex < 0) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must select pickup location"); return; }
                     if (dialog.EndLocation.SelectedIndex < 0) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must select return location"); return; }
                     if (dialog.CarTable.SelectedItems.Count <= 0) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "You must select at least one car"); return; }
+                    if (client.Type == ClientType.PRIVATE && dialog.CarTable.SelectedItems.Count >1) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "Private clients can select a maximum of 1 car"); return; }
 
-                    RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
-
-                    List<Car> oldRentedCars = manager.GetReservationCars(reservation.ID);
-
-                    Client client = manager.GetClient(clientID);
                     ReservationArrangementType arragement = (ReservationArrangementType)typeObj;
                     String startLocation = dialog.StartLocation.SelectedItem.ToString();
                     String endLocation = dialog.EndLocation.SelectedItem.ToString();

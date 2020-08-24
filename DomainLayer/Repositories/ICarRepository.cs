@@ -13,5 +13,6 @@ namespace DomainLayer.Repositories
         IEnumerable<Car> CarsAvailable(DateTime from, DateTime until, double hourRange);
         void RemoveCar(int id);
         void UpdateCar(Car car);
+        Car GetLastCar();
     }
 }

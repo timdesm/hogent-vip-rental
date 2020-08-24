@@ -92,9 +92,35 @@ namespace DomainLayer.Domain
             return uow.Cars.Find(id);
         }
 
+        public Client GetLastClient()
+        {
+            return uow.Clients.GetLastClient();
+        }
+
+        public Car GetLastCar()
+        {
+            return uow.Cars.GetLastCar();
+        }
+
+        public Invoice GetLastInvoice()
+        {
+            return uow.Invoices.GetLastInvoice();
+        }
+
         public List<Car> GetAllCars()
         {
             return uow.Cars.FindAll().ToList();
+        }
+
+        public List<Invoice> GetAllInvoices()
+        {
+            return uow.Invoices.FindAll().ToList();
+        }
+
+        public void RemoveClient(Client client)
+        {
+            uow.Clients.RemoveClient(client);
+            uow.Complete();
         }
 
         public List<Car> GetAvailableCars(DateTime from, DateTime until, double hourRange)
@@ -130,10 +156,15 @@ namespace DomainLayer.Domain
         public void RemoveReservation(int id)
         {
             Reservation reservation = uow.Reservations.Find(id);
+            RemoveReservation(reservation);
+        }
+
+        public void RemoveReservation(Reservation reservation)
+        {
             List<CarReservation> carReservations = uow.CarReservations.ReservationCars(reservation.ID).ToList();
             foreach (CarReservation cr in carReservations)
                 uow.CarReservations.RemoveCarReservation(cr);
-            RemoveInvoice(reservation.InvoiceID);
+            RemoveInvoice(uow.Invoices.Find(reservation.ID));
             uow.Reservations.RemoveReservation(reservation);
             uow.Complete();
         }
@@ -157,6 +188,16 @@ namespace DomainLayer.Domain
         {
             uow.Invoices.RemoveInvoice(id);
             List<InvoiceItem> invoiceItems = uow.InvoiceItems.FindInvoiceItems(id).ToList();
+            foreach (InvoiceItem ii in invoiceItems)
+                uow.InvoiceItems.RemoveInvoiceItem(ii);
+            uow.Complete();
+        }
+
+        public void RemoveInvoice(Invoice invoice)
+        {
+            int invoiceID = invoice.ID;
+            uow.Invoices.RemoveInvoice(invoice);
+            List<InvoiceItem> invoiceItems = uow.InvoiceItems.FindInvoiceItems(invoiceID).ToList();
             foreach (InvoiceItem ii in invoiceItems)
                 uow.InvoiceItems.RemoveInvoiceItem(ii);
             uow.Complete();
