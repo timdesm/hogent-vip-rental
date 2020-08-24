@@ -52,5 +52,27 @@ namespace DomainLayer.Domain
         {
             return $"Client : {ID},{Type},{FirstName},{LastName},{Email},{Phone},{AddressStreet},{AddressNumber},{AddressBus},{AddressZip},{AddressCity},{AddressCounty},{CompanyName},{VATNumber}";
         }
+
+        public double GetDiscount(int totalReservations)
+        {
+            double discount = 0;
+
+            switch (this.Type)
+            {
+                case ClientType.VIP:
+                    if (totalReservations >= 2 && totalReservations < 7) discount = 5.0;
+                    else if (totalReservations >= 7 && totalReservations < 15) discount = 7.5;
+                    else if (totalReservations >= 15) discount = 10.0;
+                    break;
+                case ClientType.PLANNER:
+                    if (totalReservations >= 5 && totalReservations < 10) discount = 7.5;
+                    else if (totalReservations >= 10 && totalReservations < 15) discount = 10.0;
+                    else if (totalReservations >= 15 && totalReservations < 20) discount = 12.5;
+                    else if (totalReservations >= 20 && totalReservations < 25) discount = 15.0;
+                    else if (totalReservations >= 25) discount = 25.0;
+                    break;
+            }
+            return discount;
+        }
     }
 }

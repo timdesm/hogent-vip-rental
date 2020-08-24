@@ -170,7 +170,7 @@ namespace DomainLayer.Domain
             List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
             foreach (Car car in cars)
             {
-                Double price = GetCarPrice(from, until, car, arrangement);
+                Double price = car.GetPrice(from, until, arrangement);
 
                 InvoiceItem ii;
                 switch (arrangement)
@@ -195,7 +195,7 @@ namespace DomainLayer.Domain
                 invoiceItems.Add(ii);
             }
 
-            Invoice invoice = new Invoice(client.ID, DateTime.Now, invoiceItems, GetDiscount(client), vatPercent);
+            Invoice invoice = new Invoice(client.ID, DateTime.Now, invoiceItems, client.GetDiscount(uow.Clients.GetYealyReservations(client, DateTime.Now.Year)), vatPercent);
             uow.Invoices.AddInvoice(invoice);
             uow.Complete();
             foreach (InvoiceItem ii in invoiceItems)
@@ -226,9 +226,9 @@ namespace DomainLayer.Domain
 
             if (client == null) throw new DomainException("There must a client be given");
             if (amountHours > 11) throw new DomainException("Reservations can't be more than 11 hours long");
-            if (arrangement == ReservationArrangementType.NIGHT && !IsBetweenTimes(from, TimeSpan.FromHours(20), TimeSpan.FromHours(0))) throw new DomainException("Night arragement must start between 20:00 and 00:00");
-            if (arrangement == ReservationArrangementType.WEDDING && !IsBetweenTimes(from, TimeSpan.FromHours(7), TimeSpan.FromHours(15))) throw new DomainException("Wedding arragement must start between 07:00 and 15:00");
-            if (arrangement == ReservationArrangementType.WELLNESS && !IsBetweenTimes(from, TimeSpan.FromHours(7), TimeSpan.FromHours(12))) throw new DomainException("Wellness arragement must start between 07:00 and 12:00");
+            if (arrangement == ReservationArrangementType.NIGHT && !TimeUtilities.IsBetweenTimes(from, TimeSpan.FromHours(20), TimeSpan.FromHours(0))) throw new DomainException("Night arragement must start between 20:00 and 00:00");
+            if (arrangement == ReservationArrangementType.WEDDING && !TimeUtilities.IsBetweenTimes(from, TimeSpan.FromHours(7), TimeSpan.FromHours(15))) throw new DomainException("Wedding arragement must start between 07:00 and 15:00");
+            if (arrangement == ReservationArrangementType.WELLNESS && !TimeUtilities.IsBetweenTimes(from, TimeSpan.FromHours(7), TimeSpan.FromHours(12))) throw new DomainException("Wellness arragement must start between 07:00 and 12:00");
             if (cars.Count <= 0) throw new DomainException("You must select at least one car");
 
             Invoice invoice = AddInvoice(client, arrangement, from, until, cars, vatPercent);
@@ -236,122 +236,6 @@ namespace DomainLayer.Domain
             uow.Reservations.AddReservation(reservation);
             uow.Complete();
             AddCarReservations(reservation, cars); 
-        }
-
-        private double GetDiscount(Client client)
-        {
-            double discount = 0;
-            int totalReservations = uow.Clients.GetYealyReservations(client, DateTime.Now.Year);
-
-            switch(client.Type)
-            {
-                case ClientType.VIP:
-                    if (totalReservations >= 2 && totalReservations < 7) discount = 5.0;
-                    else if(totalReservations >= 7 && totalReservations < 15) discount = 7.5;
-                    else if (totalReservations >= 15) discount = 10.0;
-                    break;
-                case ClientType.PLANNER:
-                    if (totalReservations >= 5 && totalReservations < 10) discount = 7.5;
-                    else if (totalReservations >= 10 && totalReservations < 15) discount = 10.0;
-                    else if (totalReservations >= 15 && totalReservations < 20) discount = 12.5;
-                    else if (totalReservations >= 20 && totalReservations < 25) discount = 15.0;
-                    else if (totalReservations >= 25) discount = 25.0;
-                    break;
-            }
-            return discount;
-        }
-
-        public double GetCarPrice(DateTime from, DateTime until, Car car, ReservationArrangementType arrangement)
-        {
-            Double price = 0.0;
-
-            TimeSpan diffTime = until - from;
-            Double totalHours = diffTime.TotalHours;
-            
-            switch (arrangement)
-            {
-                case ReservationArrangementType.NIGHT:
-                    if (totalHours > 7)
-                        from.AddHours(7);
-                    break;
-                case ReservationArrangementType.WEDDING:
-                    if (totalHours > 7)
-                        from.AddHours(7);
-                    break;
-                case ReservationArrangementType.WELLNESS:
-                    if (totalHours > 10)
-                        from.AddHours(10);
-                    break;
-                default:
-                    break;
-            }
-
-            TimeSpan fromTime = from.TimeOfDay;
-            TimeSpan untilTime = until.TimeOfDay;
-
-            Double normalHours = 0.0;
-            Double nightHours = 0.0;
-
-            while(fromTime < untilTime)
-            {
-                fromTime = fromTime.Add(TimeSpan.FromHours(1));
-                if (fromTime >= TimeSpan.FromHours(22) || fromTime <= TimeSpan.FromHours(6))
-                    nightHours += 1;
-                else
-                    normalHours += 1;
-            }
-
-            switch (arrangement)
-            {
-                case ReservationArrangementType.NIGHT:
-                    price = car.PriceNight;
-                    if (totalHours > 7)
-                    {
-                        price += normalHours * (car.PriceFirst * 0.65);
-                        price += nightHours * (car.PriceFirst * 1.4); 
-                    }
-                    break;
-                case ReservationArrangementType.WEDDING:
-                    price = car.PriceWedding;
-                    if (totalHours > 7)
-                    {
-                        price += normalHours * (car.PriceFirst * 0.65);
-                        price += nightHours * (car.PriceFirst * 1.4);
-                    }
-                    break;
-                case ReservationArrangementType.WELLNESS:
-                    price = car.PriceWedding;
-                    if (totalHours > 10)
-                    {
-                        price += normalHours * (car.PriceFirst * 0.65);
-                        price += nightHours * (car.PriceFirst * 1.4);
-                    }
-                    break;
-                default: 
-                    if(!IsBetweenTimes(from, TimeSpan.FromHours(22), TimeSpan.FromHours(6))) {
-                        price = car.PriceFirst;
-                        normalHours -= 1;
-                    }
-                    price += normalHours * (car.PriceFirst * 0.65);
-                    price += nightHours * (car.PriceFirst * 1.4);
-                    break;
-            }
-
-            return Math.Round(price / 5.0) * 5;
-        }
-
-        private Boolean IsBetweenTimes(DateTime datum, TimeSpan? start, TimeSpan? end)
-        {
-            Boolean isBetween = false;
-            DateTime StartDate = DateTime.Today;
-            DateTime EndDate = DateTime.Today;
-            if (start >= end)
-                EndDate = EndDate.AddDays(1);
-            StartDate = StartDate.Date + start.Value;
-            EndDate = EndDate.Date + end.Value;
-            if ((datum >= StartDate) && (datum <= EndDate))
-                isBetween = true;
-            return isBetween;
         }
     }
 }
