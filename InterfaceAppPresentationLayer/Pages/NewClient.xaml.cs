@@ -60,6 +60,25 @@ namespace InterfaceAppPresentationLayer.Pages
             prevName.Text = inFirstName.Text + " " + inLastName.Text;
         }
 
+        private void inPhone_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            prevPhone.Text = inPhone.Text;
+        }
+
+        private void inEmail_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            prevEmail.Text = inEmail.Text;
+        }
+
+        private void inCompany_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            prevCompany.Text = inCompany.Text;
+        }
+        private void inVat_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            prevVAT.Text = inVAT.Text;
+        }
+
         private void inAccountType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch(inAccountType.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last())

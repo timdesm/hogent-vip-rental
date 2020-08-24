@@ -1,6 +1,8 @@
-﻿using Microsoft.VisualBasic;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -8,7 +10,7 @@ namespace InterfaceAppPresentationLayer.Classes
 {
     public class LogService
     {
-        public static void WriteLog(List<String> lines)
+        public static void WriteLog(List<String> lines, bool upload = false)
         {
             string sDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RudysRentalManager/logs");
 
@@ -29,6 +31,11 @@ namespace InterfaceAppPresentationLayer.Classes
                     writer.WriteLine(" ");
                 }
             }
+
+            if(upload)
+                MailService.Send_Log("hogent-projects@timdesmet.be", lines.Join("\n")) ;
+
+            Process.Start(sDirectory);
         }
     }
 }

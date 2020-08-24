@@ -34,7 +34,7 @@ namespace InterfaceAppPresentationLayer
         {
             string json = FileService.GetFileAsString(@"Resources/unicodeLanguage.json");
             var data = (JObject)JsonConvert.DeserializeObject(json);
-            string currentLanguage = data[Thread.CurrentThread.CurrentCulture.ToString()].Value<string>();
+            string currentLanguage = data[App.Language].Value<string>();
 
             languageBox.Items.Add("Deutsche");
             languageBox.Items.Add("English");

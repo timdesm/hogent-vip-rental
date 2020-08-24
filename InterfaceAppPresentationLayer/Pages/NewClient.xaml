@@ -9,7 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="NewClient">
 
-    <Border Grid.Row="1" BorderBrush="#FFFFFF" BorderThickness="1" Padding="12" Margin="24,0,24,24" >
+    <Border Grid.Row="1" BorderBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12" Margin="24,0,24,24" >
         <Grid VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
@@ -21,8 +21,8 @@
                     <ui:SimpleStackPanel Spacing="4">
                         <TextBox ui:ControlHelper.Header="First Name:" x:Name="inFirstName" TextChanged="inFirstName_TextChanged"/>
                         <TextBox ui:ControlHelper.Header="Last Name:" x:Name="inLastName" TextChanged="inLastName_TextChanged" />
-                        <TextBox ui:ControlHelper.Header="Phone:" x:Name="inPhone"  />
-                        <TextBox ui:ControlHelper.Header="Email:" x:Name="inEmail"  />
+                        <TextBox ui:ControlHelper.Header="Phone:" x:Name="inPhone" TextChanged="inPhone_TextChanged" />
+                        <TextBox ui:ControlHelper.Header="Email:" x:Name="inEmail" TextChanged="inEmail_TextChanged"  />
                         <TextBox ui:ControlHelper.Header="Street:" x:Name="inAddrStreet"  />
 
                         <Grid>
@@ -48,8 +48,8 @@
                         <ComboBox ui:ControlHelper.Header="Country:" x:Name="inAddrCountry" HorizontalAlignment="Stretch" />
 
                         <ComboBox ui:ControlHelper.Header="Account Type:" x:Name="inAccountType" HorizontalAlignment="Stretch" SelectionChanged="inAccountType_SelectionChanged" />
-                        <TextBox ui:ControlHelper.Header="Company Name:" x:Name="inCompany" Visibility="Collapsed" />
-                        <TextBox ui:ControlHelper.Header="VAT Number:" x:Name="inVAT" Visibility="Collapsed" />
+                        <TextBox ui:ControlHelper.Header="Company Name:" x:Name="inCompany" Visibility="Collapsed"  TextChanged="inCompany_TextChanged" />
+                        <TextBox ui:ControlHelper.Header="VAT Number:" x:Name="inVAT" Visibility="Collapsed"  TextChanged="inVat_TextChanged" />
 
                         <Button x:Name="Submit" Content="{DynamicResource new_client_submit}" Height="32" Width="267" HorizontalAlignment="Left" Style="{StaticResource AccentButtonStyle}" Click="Submit_Click" Margin="0,15,0,0"  />
                         <TextBlock x:Name="SubmitThrowback" />
@@ -58,19 +58,14 @@
                 </ui:SimpleStackPanel>
             </ScrollViewer>
 
-            <ui:SimpleStackPanel Grid.Column="1" HorizontalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundAltLowBrush}" Margin="20,0,20,0">
-                <ui:PersonPicture x:Name="avatarPicture" Margin="0,10,0,0" />
-                <TextBlock x:Name="prevName" Text="Tim De Smet" TextAlignment="Center" FontSize="20" FontWeight="Bold" Margin="0,5,0,0"  />
-                <TextBlock x:Name="prevCompany" Text="Jetstax" TextAlignment="Center" FontSize="15" Visibility="Hidden" />
-                <TextBlock x:Name="prevVAT" Text="BE1001565456" TextAlignment="Center" FontSize="10" Visibility="Hidden" />
+            <ui:SimpleStackPanel Grid.Column="1" HorizontalAlignment="Stretch" Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" Margin="20,0,20,0">
+                <ui:PersonPicture x:Name="avatarPicture" Margin="0,25,0,0" />
+                <TextBlock x:Name="prevName" Text="" TextAlignment="Center" FontSize="20" FontWeight="Bold" Margin="0,25,0,0"  />
+                <TextBlock x:Name="prevCompany" Text="" TextAlignment="Center" FontSize="15" />
+                <TextBlock x:Name="prevVAT" Text="" TextAlignment="Center" FontSize="10"  />
 
-                <TextBlock x:Name="prevEmail" Text="tim.de.smet@hotmail.be" TextAlignment="Center" FontSize="14" Margin="0,15,0,0"  />
-                <TextBlock x:Name="prevPhone" Text="+3493100289" TextAlignment="Center" FontSize="14"  />
-
-                <TextBlock x:Name="prevAddrStreet" Text="Azaleastraat 57" TextAlignment="Center" FontSize="14" Margin="0,15,0,0"  />
-                <TextBlock x:Name="prevAddrCity" Text="Evergem, 9940" TextAlignment="Center" FontSize="14"  />
-                <TextBlock x:Name="prevAddrCountry" Text="Belgium" TextAlignment="Center" FontSize="14"  />
-
+                <TextBlock x:Name="prevEmail" Text="" TextAlignment="Center" FontSize="14" Margin="0,15,0,0"  />
+                <TextBlock x:Name="prevPhone" Text="" TextAlignment="Center" FontSize="14"  />
             </ui:SimpleStackPanel>
 
         </Grid>

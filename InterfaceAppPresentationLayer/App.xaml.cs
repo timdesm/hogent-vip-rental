@@ -17,12 +17,14 @@ namespace InterfaceAppPresentationLayer
     public partial class App : Application
     {
         public static bool RepositoryImageMode { get; set; } = false;
+        public static string Language { get; set; } 
 
         public App() { }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            Language = Thread.CurrentThread.CurrentCulture.ToString();
             SetLanguageDictionary();
         }
 
@@ -37,11 +39,12 @@ namespace InterfaceAppPresentationLayer
         private static void SetLanguageDictionary()
         {
             ResourceDictionary dict = new ResourceDictionary();
-            SetLanguage(Thread.CurrentThread.CurrentCulture.ToString());
+            SetLanguage(Language);
         }
 
         public static void SetLanguage(string uniLang)
         {
+            Language = uniLang;
             ResourceDictionary dict = new ResourceDictionary();
             switch (uniLang)
             {

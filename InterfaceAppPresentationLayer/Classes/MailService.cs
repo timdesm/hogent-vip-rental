@@ -83,5 +83,18 @@ namespace InterfaceAppPresentationLayer.Classes
                 catch (Exception ex) { LogService.WriteLog(new List<String>() { "Mail Service Exeption (Update Reservation): ", ex.Message, " ", ex.InnerException.ToString(), ex.StackTrace }); }
             }
         }
+
+        public static void Send_Log(string email, String message)
+        {
+            if (RegexUtilities.IsValidEmail(email, true))
+            {
+                try
+                {
+                    SendMail(new List<string>() { email }, "Log from RudysVIPManager", message);
+                }
+                catch (Exception ex) { LogService.WriteLog(new List<String>() { "Mail Service Exeption (Log): ", ex.Message, " ", ex.InnerException.ToString(), ex.StackTrace }); }
+            }
+        }
+
     }
 }

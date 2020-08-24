@@ -1,14 +1,52 @@
-﻿<Page x:Class="InterfaceAppPresentationLayer.Pages.Invoices"
+﻿<ui:Page x:Class="InterfaceAppPresentationLayer.Pages.Invoices"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:InterfaceAppPresentationLayer.Pages"
+      xmlns:local="clr-namespace:InterfaceAppPresentationLayer.Pages" xmlns:ui="http://schemas.modernwpf.com/2019"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Invoices">
 
-    <Grid>
-        
-    </Grid>
-</Page>
+    <Border Grid.Row="1" BorderBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12" Margin="24,0,24,24">
+        <Grid VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="DataTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Resources>
+                    <ContextMenu x:Key="rowContextMenu">
+                        <MenuItem Header="{DynamicResource general_view}" Click="DataMenu_View">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xe1a3;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource invoice_markpaid}" Click="DataMenu_MarkPaid">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE107;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                        <Setter Property="ContextMenu" Value="{StaticResource rowContextMenu}" />
+                    </Style>
+                </DataGrid.RowStyle>
+            </DataGrid>
+        </Grid>
+    </Border>
+
+</ui:Page>
