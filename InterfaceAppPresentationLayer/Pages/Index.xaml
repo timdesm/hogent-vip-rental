@@ -11,49 +11,187 @@
 
     <Grid Margin="12,0,12,12">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
         <Grid Margin="0,0,5,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
             <Border BorderBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12" Margin="0,0,0,5">
                 <StackPanel>
                     <TextBlock Text="Todays Reservations" />
-                    <DataGrid x:Name="TodaysReservations" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+                    <DataGrid x:Name="TodaysReservations" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Resources>
+                            <ContextMenu x:Key="todaysReservationsMenu">
+                                <MenuItem Header="{DynamicResource general_edit}" Click="ReservationsMenu_Edit">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe104;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource general_view}" Click="ReservationsMenu_View">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe1a3;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource general_delete}" Click="ReservationsMenu_Delete">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xE107;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                                <Setter Property="ContextMenu" Value="{StaticResource todaysReservationsMenu}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
                 </StackPanel>
             </Border>
 
             <Border Grid.Row="1" BorderBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12"  Margin="0,5,0,0">
                 <ui:SimpleStackPanel>
-                    <TextBlock Text="Newest Reservations" />
-                    <DataGrid x:Name="NewestReservations" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+                    <TextBlock Text="Active Reservations" />
+                    <DataGrid x:Name="ActiveReservations" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Resources>
+                            <ContextMenu x:Key="activeReservationsMenu">
+                                <MenuItem Header="{DynamicResource general_edit}" Click="ReservationsMenu_Edit">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe104;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource general_view}" Click="ReservationsMenu_View">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe1a3;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource general_delete}" Click="ReservationsMenu_Delete">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xE107;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                                <Setter Property="ContextMenu" Value="{StaticResource activeReservationsMenu}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
                 </ui:SimpleStackPanel>
             </Border>
         </Grid>
 
         <Grid Grid.Column="1" Margin="5,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="175*" />
-                <RowDefinition Height="179*" />
-                <RowDefinition Height="84*"/>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
             <Border BorderBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12" Margin="0,0,0,5">
                 <StackPanel>
                     <TextBlock Text="Newest Clients" />
-                    <DataGrid x:Name="NewestClients" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+                    <DataGrid x:Name="NewestClients" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Resources>
+                            <ContextMenu x:Key="newestClientsMenu">
+                                <MenuItem Header="{DynamicResource general_edit}" Click="NewestClientsMenu_Edit">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe104;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource general_view}" Click="NewestClientsMenu_View">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe1a3;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource general_delete}" Click="NewestClientsMenu_Delete">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xE107;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                                <Setter Property="ContextMenu" Value="{StaticResource newestClientsMenu}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
                 </StackPanel>
             </Border>
 
             <Border Grid.Row="1" BorderBrush="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" BorderThickness="1" Padding="12"  Margin="0,5,0,0" Grid.RowSpan="2">
                 <StackPanel>
                     <TextBlock Text="Unpaid Invoices" />
-                    <DataGrid x:Name="UnpaidInvoices" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
+                    <DataGrid x:Name="UnpaidInvoices" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Resources>
+                            <ContextMenu x:Key="unpaidInvoiceMenu">
+                                <MenuItem Header="{DynamicResource general_view}" Click="InvoiceMenu_View">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xe1a3;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource invoice_markpaid}" Click="InvoiceMenu_MarkPaid">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="&#xE107;" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                                <Setter Property="ContextMenu" Value="{StaticResource unpaidInvoiceMenu}" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
                 </StackPanel>
             </Border>
         </Grid>

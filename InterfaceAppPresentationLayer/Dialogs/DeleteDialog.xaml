@@ -6,7 +6,5 @@
       Title="{DynamicResource delete_title}"
       PrimaryButtonText="{DynamicResource general_delete}"
       CloseButtonText="{DynamicResource general_cancel}">
-
     <TextBlock Text="{DynamicResource delete_content}" />
-    
-</ui:ContentDialog >
+</ui:ContentDialog>

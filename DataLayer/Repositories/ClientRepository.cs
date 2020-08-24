@@ -50,5 +50,10 @@ namespace DataLayer.Repositories
         {
             return context.Reservations.Where(r => r.Client == client && r.ReservationDate.Year == year).Count();
         }
+
+        public void UpdateClient(Client client)
+        {
+            context.Update(client);
+        }
     }
 }

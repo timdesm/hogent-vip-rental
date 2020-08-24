@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DomainLayer.Domain;
+using InterfaceAppPresentationLayer.Classes;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,9 @@ namespace InterfaceAppPresentationLayer.Dialogs
         public ReservationView(Reservation reservation)
         {
             InitializeComponent();
-            this.Title = "Reservation #" + reservation.ID;
             InitializeDataGrid();
+
+            this.Title = this.Title.ToString().Replace("{id}", reservation.ID + "");
 
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Invoice invoice = manager.GetInvoice(reservation.InvoiceID);
@@ -95,7 +97,7 @@ namespace InterfaceAppPresentationLayer.Dialogs
             invoiceItems.Rows.Add(row);
         }
 
-        private async void CarMenu_View(object sender, System.Windows.RoutedEventArgs e)
+        private void CarMenu_View(object sender, System.Windows.RoutedEventArgs e)
         {
             this.Hide();
 
@@ -103,19 +105,13 @@ namespace InterfaceAppPresentationLayer.Dialogs
             int carID = Int32.Parse(dataRowView[0].ToString());
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Car car = manager.GetCar(carID);
-            CarView dialog = new CarView(car);
-            var result = await dialog.ShowAsync();
+            DialogService.OpenCarViewDialog(car);
         }
 
-        private async void ClientView_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ClientView_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.Hide();
-            ClientView dialog = new ClientView(client);
-            var result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
-            {
-
-            }
+            DialogService.OpenClientViewDialog(client);
         }
     }
 }

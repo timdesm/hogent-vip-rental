@@ -44,5 +44,10 @@ namespace DataLayer.Repositories
         {
             context.Cars.Remove(new Car() { ID = id });
         }
+
+        public void UpdateCar(Car car)
+        {
+            context.Cars.Update(car);
+        }
     }
 }

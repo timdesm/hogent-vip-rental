@@ -1,20 +1,22 @@
 ﻿
 using DataLayer;
 using DomainLayer.Domain;
+using InterfaceAppPresentationLayer.Classes;
 using ModernWpf.Controls;
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace InterfaceAppPresentationLayer.Pages
 {
     /// <summary>
     /// Interaction logic for Index.xaml
     /// </summary>
-    public partial class Index : Page
+    public partial class Index : ModernWpf.Controls.Page
     {
         private DataTable todaysReservationsTable;
-        private DataTable newReservationsTable;
+        private DataTable activeReservationsTable;
         private DataTable newClientsTable;
         private DataTable unpaidInvoicesTable;
 
@@ -23,7 +25,7 @@ namespace InterfaceAppPresentationLayer.Pages
             InitializeComponent();
 
             InitializeTodaysReservations();
-            InitializeNewestReservations();
+            InitializeActiveReservations();
             InitializeNewestClients();
             InitializeUnpaidInvoices();
         }
@@ -34,28 +36,115 @@ namespace InterfaceAppPresentationLayer.Pages
             todaysReservationsTable.Clear();
             todaysReservationsTable.Columns.Add(new DataColumn("ID", typeof(int)));
             todaysReservationsTable.Columns.Add(new DataColumn("Client", typeof(string)));
-            todaysReservationsTable.Columns.Add(new DataColumn("Cars", typeof(string)));
             todaysReservationsTable.Columns.Add(new DataColumn("From", typeof(DateTime)));
             todaysReservationsTable.Columns.Add(new DataColumn("Until", typeof(DateTime)));
-            todaysReservationsTable.Columns.Add(new DataColumn("Arrangements", typeof(string)));
+            todaysReservationsTable.Columns.Add(new DataColumn("Arrangement", typeof(string)));
             todaysReservationsTable.Columns.Add(new DataColumn("Start Location", typeof(string)));
             todaysReservationsTable.Columns.Add(new DataColumn("End Location", typeof(string)));
-            todaysReservationsTable.Columns.Add(new DataColumn("Order Date", typeof(DateTime)));
-            todaysReservationsTable.Columns.Add(new DataColumn("Total Inc.", typeof(double)));
-            todaysReservationsTable.Columns.Add(new DataColumn("Payed", typeof(bool)));
+            todaysReservationsTable.Columns.Add(new DataColumn("Total Inc", typeof(string)));
+            todaysReservationsTable.Columns.Add(new DataColumn("Payed", typeof(string)));
             TodaysReservations.ItemsSource = todaysReservationsTable.DefaultView;
+
+            LoadTodaysReservations();
         }
 
-        private void InitializeNewestReservations()
+        private void LoadTodaysReservations()
         {
-            newReservationsTable = new DataTable();
-            newReservationsTable.Clear();
-            newReservationsTable.Columns.Add(new DataColumn("ID", typeof(int)));
-            newReservationsTable.Columns.Add(new DataColumn("Client", typeof(string)));
-            newReservationsTable.Columns.Add(new DataColumn("Date", typeof(string)));
-            newReservationsTable.Columns.Add(new DataColumn("Arrangement", typeof(string)));
-            newReservationsTable.Columns.Add(new DataColumn("Start Location", typeof(string)));
-            NewestReservations.ItemsSource = newReservationsTable.DefaultView;
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            
+
+            foreach (Reservation reservation in manager.GetReservations(DateTime.Today, DateTime.Today.AddDays(1)))
+            {
+                DomainLayer.Domain.Invoice invoice = manager.GetInvoice(reservation.InvoiceID);
+                Client client = manager.GetClient(reservation.ClientID);
+                string clientStr = client.FirstName + " " + client.LastName;
+                if (!string.IsNullOrWhiteSpace(client.CompanyName)) clientStr = "(" + client.CompanyName + ") " + clientStr;
+                AddTodaysReservationsRow(reservation.ID, clientStr, reservation.ReservationDate, reservation.ReservedUntil, char.ToUpper(reservation.Arrangement.ToString().ToLower()[0]) + reservation.Arrangement.ToString().ToLower().Substring(1), reservation.StartLocation, reservation.EndLocation, string.Format("€{0:0.00}", invoice.TotalInc), (invoice.PaymentDue == 0) ? "Paid" : "Unpaid");
+            }
+        }
+
+        private void AddTodaysReservationsRow(int id, string client, DateTime from, DateTime until, string arrangement, string startLocation, string endLocation, string totalInc, string payed)
+        {
+            DataRow row = todaysReservationsTable.NewRow();
+            row[0] = id;
+            row[1] = client;
+            row[2] = from;
+            row[3] = until;
+            row[4] = arrangement;
+            row[5] = startLocation;
+            row[6] = endLocation;
+            row[7] = totalInc;
+            row[8] = payed;
+            todaysReservationsTable.Rows.Add(row);
+        }
+
+        private void InitializeActiveReservations()
+        {
+            activeReservationsTable = new DataTable();
+            activeReservationsTable.Clear();
+            activeReservationsTable.Columns.Add(new DataColumn("ID", typeof(int)));
+            activeReservationsTable.Columns.Add(new DataColumn("Client", typeof(string)));
+            activeReservationsTable.Columns.Add(new DataColumn("From", typeof(DateTime)));
+            activeReservationsTable.Columns.Add(new DataColumn("Until", typeof(DateTime)));
+            activeReservationsTable.Columns.Add(new DataColumn("Arrangement", typeof(string)));
+            activeReservationsTable.Columns.Add(new DataColumn("Start Location", typeof(string)));
+            activeReservationsTable.Columns.Add(new DataColumn("End Location", typeof(string)));
+            activeReservationsTable.Columns.Add(new DataColumn("Total Inc", typeof(string)));
+            activeReservationsTable.Columns.Add(new DataColumn("Payed", typeof(string)));
+            ActiveReservations.ItemsSource = activeReservationsTable.DefaultView;
+
+            LoadActiveReservations();
+        }
+
+        private void LoadActiveReservations()
+        {
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            foreach (Reservation reservation in manager.GetActiveReservations())
+            {
+                DomainLayer.Domain.Invoice invoice = manager.GetInvoice(reservation.InvoiceID);
+                Client client = manager.GetClient(reservation.ClientID);
+                string clientStr = client.FirstName + " " + client.LastName;
+                if (!string.IsNullOrWhiteSpace(client.CompanyName)) clientStr = "(" + client.CompanyName + ") " + clientStr;
+                AddActiveReservationsRow(reservation.ID, clientStr, reservation.ReservationDate, reservation.ReservedUntil, char.ToUpper(reservation.Arrangement.ToString().ToLower()[0]) + reservation.Arrangement.ToString().ToLower().Substring(1), reservation.StartLocation, reservation.EndLocation, string.Format("€{0:0.00}", invoice.TotalInc), (invoice.PaymentDue == 0) ? "Paid" : "Unpaid");
+            }
+        }
+
+        private void AddActiveReservationsRow(int id, string client, DateTime from, DateTime until, string arrangement, string startLocation, string endLocation, string totalInc, string payed)
+        {
+            DataRow row = activeReservationsTable.NewRow();
+            row[0] = id;
+            row[1] = client;
+            row[2] = from;
+            row[3] = until;
+            row[4] = arrangement;
+            row[5] = startLocation;
+            row[6] = endLocation;
+            row[7] = totalInc;
+            row[8] = payed;
+            activeReservationsTable.Rows.Add(row);
+        }
+
+        private void ReservationsMenu_Edit(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int reservationID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Reservation reservation = manager.GetReservation(reservationID);
+            DialogService.OpenReservationEditDialog(reservation);
+        }
+
+        private void ReservationsMenu_View(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int reservationID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Reservation reservation = manager.GetReservation(reservationID);
+            DialogService.OpenReservationViewDialog(reservation);
+        }
+
+        private void ReservationsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
+        {
+
         }
 
         private void InitializeNewestClients()
@@ -69,7 +158,7 @@ namespace InterfaceAppPresentationLayer.Pages
             newClientsTable.Columns.Add(new DataColumn("Type", typeof(string)));
             NewestClients.ItemsSource = newClientsTable.DefaultView;
 
-            Task.Run(() => LoadNewestClients());
+            LoadNewestClients();
         }
 
         private void LoadNewestClients()
@@ -92,15 +181,84 @@ namespace InterfaceAppPresentationLayer.Pages
             newClientsTable.Rows.Add(row);
         }
 
+        private void NewestClientsMenu_Edit(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int clientID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Client client = manager.GetClient(clientID);
+            DialogService.OpenClientEditDialog(client);
+        }
+
+        private void NewestClientsMenu_View(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int clientID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Client client = manager.GetClient(clientID);
+            DialogService.OpenClientViewDialog(client);
+        }
+
+        private void NewestClientsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
         private void InitializeUnpaidInvoices()
         {
             unpaidInvoicesTable = new DataTable();
             unpaidInvoicesTable.Clear();
             unpaidInvoicesTable.Columns.Add(new DataColumn("ID", typeof(int)));
             unpaidInvoicesTable.Columns.Add(new DataColumn("Client", typeof(string)));
-            unpaidInvoicesTable.Columns.Add(new DataColumn("Total Inc.", typeof(double)));
-            unpaidInvoicesTable.Columns.Add(new DataColumn("Due", typeof(double)));
+            unpaidInvoicesTable.Columns.Add(new DataColumn("Date", typeof(DateTime)));
+            unpaidInvoicesTable.Columns.Add(new DataColumn("Total Exc", typeof(string)));
+            unpaidInvoicesTable.Columns.Add(new DataColumn("VAT", typeof(string)));
+            unpaidInvoicesTable.Columns.Add(new DataColumn("Total Inc", typeof(string)));
+            unpaidInvoicesTable.Columns.Add(new DataColumn("Due", typeof(string)));
             UnpaidInvoices.ItemsSource = unpaidInvoicesTable.DefaultView;
+
+            LoadUnpaidInvoices();
+        }
+
+        private void LoadUnpaidInvoices()
+        {
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            foreach (DomainLayer.Domain.Invoice invoice in manager.GetUnpaidInvoices())
+            {
+                Client client = manager.GetClient(invoice.ClientID);
+                string clientStr = client.FirstName + " " + client.LastName;
+                if (!string.IsNullOrWhiteSpace(client.CompanyName)) clientStr = "(" + client.CompanyName + ") " + clientStr;
+                AddUnpiadInvoiceRow(invoice.ID, clientStr, invoice.InvoiceDate, string.Format("€{0:0.00}", invoice.TotalExc), string.Format("€{0:0.00}", invoice.VAT), string.Format("€{0:0.00}", invoice.TotalInc), string.Format("€{0:0.00}", invoice.PaymentDue));
+            }
+        }
+
+        private void AddUnpiadInvoiceRow(int id, string client, DateTime date, string totalExc, string vat, string totalInc, string due)
+        {
+            DataRow row = unpaidInvoicesTable.NewRow();
+            row[0] = id;
+            row[1] = client;
+            row[2] = date;
+            row[3] = totalExc;
+            row[4] = vat;
+            row[5] = totalInc;
+            row[6] = due;
+            unpaidInvoicesTable.Rows.Add(row);
+        }
+
+        private void InvoiceMenu_View(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int invoiceID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            DomainLayer.Domain.Invoice invoice = manager.GetInvoice(invoiceID);
+        }
+
+        private void InvoiceMenu_MarkPaid(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int invoiceID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            DomainLayer.Domain.Invoice invoice = manager.GetInvoice(invoiceID);
         }
     }
 }

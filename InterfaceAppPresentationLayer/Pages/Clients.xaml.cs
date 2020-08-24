@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DomainLayer.Domain;
+using InterfaceAppPresentationLayer.Classes;
 using ModernWpf.Controls;
 using System;
 using System.Data;
@@ -19,20 +20,25 @@ namespace InterfaceAppPresentationLayer.Pages
         {
             InitializeComponent();
 
-            InitializeComboBox_FilterType();
             clientTable = new DataTable();
             clientTable.Clear();
             clientTable.Columns.Add(new DataColumn("ID", typeof(int)));
             clientTable.Columns.Add(new DataColumn("First Name", typeof(string)));
             clientTable.Columns.Add(new DataColumn("Last Name", typeof(string)));
+            clientTable.Columns.Add(new DataColumn("Email", typeof(string)));
+            clientTable.Columns.Add(new DataColumn("Phone", typeof(string)));
             clientTable.Columns.Add(new DataColumn("Company", typeof(string)));
             clientTable.Columns.Add(new DataColumn("VAT", typeof(string)));
-            clientTable.Columns.Add(new DataColumn("Type", typeof(ClientType)));
+            clientTable.Columns.Add(new DataColumn("Type", typeof(string)));
+            clientTable.Columns.Add(new DataColumn("Street", typeof(string)));
+            clientTable.Columns.Add(new DataColumn("Number", typeof(string)));
+            clientTable.Columns.Add(new DataColumn("Box", typeof(string)));
             clientTable.Columns.Add(new DataColumn("City", typeof(string)));
+            clientTable.Columns.Add(new DataColumn("Zip", typeof(string)));
             clientTable.Columns.Add(new DataColumn("Country", typeof(string)));
             DataTable.ItemsSource = clientTable.DefaultView;
 
-            Task.Run(() => InitializeDataGrid());
+            InitializeDataGrid();
         }
 
         private void InitializeDataGrid()
@@ -40,33 +46,49 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (Client client in manager.GetAllClients())
             {
-                AddTableRow(client.ID, client.FirstName, client.LastName, client.CompanyName, client.VATNumber, client.Type, client.AddressCity, client.AddressCounty);
+                AddTableRow(client.ID, client.FirstName, client.LastName, client.Email, client.Phone, client.CompanyName, client.VATNumber, char.ToUpper(client.Type.ToString().ToLower()[0]) + client.Type.ToString().ToLower().Substring(1), client.AddressStreet, client.AddressNumber, client.AddressBus, client.AddressCity, client.AddressZip, client.AddressCounty);
             }
         }
 
-        private void InitializeComboBox_FilterType()
-        {
-            foreach(ClientType type in (ClientType[]) Enum.GetValues(typeof(ClientType)))
-            {
-                FilterType.Items.Add(char.ToUpper(type.ToString().ToLower()[0]) + type.ToString().ToLower().Substring(1));
-            }
-        }
-
-        private void AddTableRow(int id, string firstName, string lastName, string company, string vat, ClientType type, string city, string country)
+        private void AddTableRow(int id, string firstName, string lastName, string email, string phone, string company, string vat, string type, string street, string number, string box, string city, string zip, string country)
         {
             DataRow row = clientTable.NewRow();
             row[0] = id;
             row[1] = firstName;
             row[2] = lastName;
-            row[3] = company;
-            row[4] = vat;
-            row[5] = type;
-            row[6] = city;
-            row[7] = country;
+            row[3] = email;
+            row[4] = phone;
+            row[5] = company;
+            row[6] = vat;
+            row[7] = type;
+            row[8] = street;
+            row[9] = number;
+            row[10] = box;
+            row[11] = city;
+            row[12] = zip;
+            row[13] = country;
             clientTable.Rows.Add(row);
         }
 
-        private void DataTableAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void ClientsMenu_Edit(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int clientID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Client client = manager.GetClient(clientID);
+            DialogService.OpenClientEditDialog(client);
+        }
+
+        private void ClientsMenu_View(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int clientID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Client client = manager.GetClient(clientID);
+            DialogService.OpenClientViewDialog(client);
+        }
+
+        private void ClientsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
         {
 
         }

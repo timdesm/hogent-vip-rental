@@ -54,6 +54,7 @@
     <system:String x:Key="reservation_returned">Ingeleverd</system:String>
     <system:String x:Key="reservation_cars">Voertuigen</system:String>
     <system:String x:Key="reservation_invoice">Factuur</system:String>
+    <system:String x:Key="reservation_dialog_title">Reservatie #{id}</system:String>
 
     <system:String x:Key="invoice_id">Factuurnummer</system:String>
     <system:String x:Key="invoice_date">Aanmaak Datum</system:String>
@@ -64,6 +65,7 @@
     <system:String x:Key="invoice_totalinc">Totaal Inc.</system:String>
     <system:String x:Key="invoice_due">Verschuldigd</system:String>
     <system:String x:Key="invoice_status">Status</system:String>
+    <system:String x:Key="invoice_markpaid">Markeren als Betaald</system:String>
 
     <system:String x:Key="car_brand">Merk</system:String>
     <system:String x:Key="car_model">Model</system:String>
@@ -74,6 +76,7 @@
     <system:String x:Key="cars_price_wellness">Prijs Wellness</system:String>
     <system:String x:Key="cars_available">Beschikbaar</system:String>
     <system:String x:Key="cars_times_reserved">Aantal Gereserveerd</system:String>
+    <system:String x:Key="car_dialog_title">Voertuig #{id}</system:String>
 
     <system:String x:Key="client_first_name">Voornaam</system:String>
     <system:String x:Key="client_last_name">Achternaam</system:String>

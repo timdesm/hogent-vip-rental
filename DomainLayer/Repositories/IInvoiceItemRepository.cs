@@ -11,5 +11,6 @@ namespace DomainLayer.Repositories
         InvoiceItem Find(int ID);
         IEnumerable<InvoiceItem> FindInvoiceItems(int invoiceID);
         void RemoveInvoiceItem(int id);
+        void RemoveInvoiceItem(InvoiceItem ii);
     }
 }

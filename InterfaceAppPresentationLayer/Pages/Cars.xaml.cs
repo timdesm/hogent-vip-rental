@@ -3,8 +3,12 @@ using System.Data;
 using System.Drawing;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using DataLayer;
 using DomainLayer.Domain;
+using InterfaceAppPresentationLayer.Classes;
+using InterfaceAppPresentationLayer.Dialogs;
 using ModernWpf.Controls;
 
 namespace InterfaceAppPresentationLayer.Pages
@@ -12,7 +16,7 @@ namespace InterfaceAppPresentationLayer.Pages
     /// <summary>
     /// Interaction logic for Cars.xaml
     /// </summary>
-    public partial class Cars : Page
+    public partial class Cars : ModernWpf.Controls.Page
     {
         private DataTable carTable;
 
@@ -39,7 +43,7 @@ namespace InterfaceAppPresentationLayer.Pages
             carTable.Columns.Add(new DataColumn("Available", typeof(bool)));
             DataTable.ItemsSource = carTable.DefaultView;
 
-            Task.Run(() => InitializeDataGrid_Data());
+            InitializeDataGrid_Data();
         }
 
         private void InitializeDataGrid_Data()
@@ -96,6 +100,36 @@ namespace InterfaceAppPresentationLayer.Pages
             {
                 MainWindow.DisplayThrowbackDialog("An internal error occurred", error.Message);
                 return;
+            }
+        }
+
+        private void DataMenu_Edit(object sender, RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int carID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Car car = manager.GetCar(carID);
+            DialogService.OpenCarEditDialog(car);
+        }
+
+        private void DataMenu_View(object sender, RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int carID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Car car = manager.GetCar(carID);
+            DialogService.OpenCarViewDialog(car);
+        }
+
+        private async void DataMenu_Delete(object sender, RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int carID = Int32.Parse(dataRowView[0].ToString());
+            DeleteDialog dialog = new DeleteDialog("car #" + carID);
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             }
         }
     }

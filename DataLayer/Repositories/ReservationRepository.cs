@@ -35,5 +35,25 @@ namespace DataLayer.Repositories
         {
             context.Reservations.Remove(new Reservation() { ID = id });
         }
+
+        public void RemoveReservation(Reservation reservation)
+        {
+            context.Reservations.Remove(reservation);
+        }
+
+        public IEnumerable<Reservation> Find(DateTime from, DateTime until) {
+            return context.Reservations.Where(r => r.ReservationDate >= from).Where(r => r.ReservationDate <= until).AsEnumerable<Reservation>();
+        }
+
+        public IEnumerable<Reservation> FindActive()
+        {
+            return context.Reservations.Where(r => r.ReservationEnded < r.ReservationDate).Where(r => r.ReservationDate <= DateTime.Now).AsEnumerable<Reservation>();
+        }
+
+        public void UpdateReservation(Reservation reservation)
+        {
+            context.Reservations.Update(reservation);
+        }
     }
 }
+

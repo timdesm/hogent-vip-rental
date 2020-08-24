@@ -67,7 +67,7 @@ namespace InterfaceAppPresentationLayer.Pages
                     avatarPicture.Foreground = Brushes.White;
                     changeCompanyFieldVisibility(false);
                     break;
-                case "VIP":
+                case "Vip":
                     avatarPicture.Foreground = Brushes.LightGoldenrodYellow;
                     changeCompanyFieldVisibility(false);
                     break;

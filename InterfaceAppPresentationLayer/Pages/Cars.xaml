@@ -18,30 +18,41 @@
             </Grid.ColumnDefinitions>
 
             <DataGrid x:Name="DataTable" IsReadOnly="True" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
                 <DataGrid.Resources>
-                    <ResourceDictionary>
-                        <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Background" Value="{x:Null}" />
-                            <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{x:Null}" />
-                                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Setter Property="Background" Value="{x:Null}" />
-                            <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{x:Null}" />
-                                    <Setter Property="BorderBrush" Value="{x:Null}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ResourceDictionary>
+                    <ContextMenu x:Key="rowContextMenu">
+                        <MenuItem Header="{DynamicResource general_edit}" Click="DataMenu_Edit">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xe104;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource general_view}" Click="DataMenu_View">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xe1a3;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource general_delete}" Click="DataMenu_Delete">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Glyph="&#xE107;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
                 </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                        <Setter Property="ContextMenu" Value="{StaticResource rowContextMenu}" />
+                    </Style>
+                </DataGrid.RowStyle>
             </DataGrid>
 
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}" Padding="12,12,12,12" Margin="20,0,0,0">

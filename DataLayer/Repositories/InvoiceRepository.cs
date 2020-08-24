@@ -30,5 +30,10 @@ namespace DataLayer.Repositories
         {
             context.Invoices.Remove(new Invoice() { ID = id });
         }
+
+        public IEnumerable<Invoice> FindUnpaid()
+        {
+            return context.Invoices.Where(i => i.PaymentDue > 0).AsEnumerable<Invoice>();
+        }
     }
 }

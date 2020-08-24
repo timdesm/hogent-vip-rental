@@ -54,6 +54,7 @@
     <system:String x:Key="reservation_returned">Returned</system:String>
     <system:String x:Key="reservation_cars">Vehicles</system:String>
     <system:String x:Key="reservation_invoice">Invoice</system:String>
+    <system:String x:Key="reservation_dialog_title">Reservation #{id}</system:String>
 
     <system:String x:Key="invoice_id">Invoice Number</system:String>
     <system:String x:Key="invoice_date">Generation Date</system:String>
@@ -64,6 +65,7 @@
     <system:String x:Key="invoice_totalinc">Total Inc.</system:String>
     <system:String x:Key="invoice_due">Payment Due</system:String>
     <system:String x:Key="invoice_status">Status</system:String>
+    <system:String x:Key="invoice_markpaid">Mark as Paid</system:String>
 
     <system:String x:Key="car_brand">Brand</system:String>
     <system:String x:Key="car_model">Model</system:String>
@@ -74,6 +76,7 @@
     <system:String x:Key="cars_price_wellness">Pirce Wellness</system:String>
     <system:String x:Key="cars_available">Available</system:String>
     <system:String x:Key="cars_times_reserved">Times Reserved</system:String>
+    <system:String x:Key="car_dialog_title">Car #{id}</system:String>
 
     <system:String x:Key="client_first_name">First Name</system:String>
     <system:String x:Key="client_last_name">Last Name</system:String>
@@ -87,7 +90,7 @@
     <system:String x:Key="client_address_country">Country</system:String>
     <system:String x:Key="client_type">Account Type</system:String>
     <system:String x:Key="client_company">Company Name</system:String>
-    <system:String x:Key="client_company">VAT Number</system:String>
+    <system:String x:Key="client_vat">VAT Number</system:String>
     <system:String x:Key="client_dialog_title">Client #{id}</system:String>
 
     <system:String x:Key="delete_title">Delete {type} permanently?</system:String>

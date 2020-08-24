@@ -12,14 +12,15 @@ namespace InterfaceAppPresentationLayer.Dialogs
         public CarView(Car car)
         {
             InitializeComponent();
-            this.Title = "Car #" + car.ID;
+            this.Title = this.Title.ToString().Replace("{id}", car.ID + "");
+
             Brand.Text = car.Brand;
             Model.Text = car.Type;
             Color.Text = car.Color;
-            PriceFirst.Text = string.Format("€{0:0.00}", car.PriceFirst);
-            PriceNight.Text = string.Format("€{0:0.00}", car.PriceNight);
-            PriceWedding.Text = string.Format("€{0:0.00}", car.PriceWedding);
-            PriceWellness.Text = string.Format("€{0:0.00}", car.PriceWellness);
+            PriceFirst.Value = car.PriceFirst;
+            PriceNight.Value = car.PriceNight;
+            PriceWedding.Value = car.PriceWedding;
+            PriceWellness.Value = car.PriceWellness;
             Available.IsOn = car.Available;
         } 
     }

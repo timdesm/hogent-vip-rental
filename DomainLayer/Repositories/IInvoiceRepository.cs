@@ -10,5 +10,6 @@ namespace DomainLayer.Repositories
         void AddInvoice(Invoice invoice);
         Invoice Find(int ID);
         void RemoveInvoice(int id);
+        IEnumerable<Invoice> FindUnpaid();
     }
 }

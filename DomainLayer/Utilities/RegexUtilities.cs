@@ -8,9 +8,12 @@ namespace DomainLayer.Utilities
 {
     public class RegexUtilities
     {
-        public static bool IsValidEmail(string email)
+        public static bool IsValidEmail(string email, bool IsRequired = false)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email) & !IsRequired)
+                return true;
+
+            if (string.IsNullOrWhiteSpace(email) & IsRequired)
                 return false;
 
             try
@@ -45,7 +48,7 @@ namespace DomainLayer.Utilities
             }
         }
 
-        public static bool IsValidPhoneNumber(string phone, bool IsRequired)
+        public static bool IsValidPhoneNumber(string phone, bool IsRequired = false)
         {
             if (string.IsNullOrWhiteSpace(phone) & !IsRequired)
                 return true;

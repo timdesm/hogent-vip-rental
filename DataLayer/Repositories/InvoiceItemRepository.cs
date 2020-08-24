@@ -35,5 +35,10 @@ namespace DataLayer.Repositories
         {
             context.InvoiceItems.Remove(new InvoiceItem() { ID = id });
         }
+
+        public void RemoveInvoiceItem(InvoiceItem ii)
+        {
+            context.InvoiceItems.Remove(ii);
+        }
     }
 }

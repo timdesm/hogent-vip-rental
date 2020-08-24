@@ -30,6 +30,26 @@ namespace DomainLayer.Domain
             PaymentDue = TotalInc;
         }
 
+        public Invoice(int clientID, DateTime invoiceDate, List<InvoiceItem> items, double discountPercent, double vatPercent)
+        {
+            ClientID = clientID;
+            InvoiceDate = invoiceDate;
+            Items = items;
+            DiscountPercent = discountPercent;
+            VATPercent = vatPercent;
+
+            SubTotal = 0.0;
+            foreach (InvoiceItem item in items)
+            {
+                SubTotal += item.Total;
+            }
+            Discount = Math.Round(SubTotal / 100 * DiscountPercent, 2);
+            TotalExc = SubTotal - Discount;
+            VAT = Math.Round(TotalExc / 100 * VATPercent, 2);
+            TotalInc = TotalExc + VAT;
+            PaymentDue = TotalInc;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }

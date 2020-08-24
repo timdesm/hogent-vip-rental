@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DomainLayer.Domain;
+using InterfaceAppPresentationLayer.Classes;
 using InterfaceAppPresentationLayer.Dialogs;
 using ModernWpf.Controls;
 using System;
@@ -30,6 +31,7 @@ namespace InterfaceAppPresentationLayer.Pages
             reservationTable.Columns.Add(new DataColumn("Cars", typeof(string)));
             reservationTable.Columns.Add(new DataColumn("From", typeof(DateTime)));
             reservationTable.Columns.Add(new DataColumn("Until", typeof(DateTime)));
+            reservationTable.Columns.Add(new DataColumn("Returned", typeof(string)));
             reservationTable.Columns.Add(new DataColumn("Arrangements", typeof(string)));
             reservationTable.Columns.Add(new DataColumn("Pickup Location", typeof(string)));
             reservationTable.Columns.Add(new DataColumn("Return Location", typeof(string)));
@@ -39,7 +41,7 @@ namespace InterfaceAppPresentationLayer.Pages
             reservationTable.Columns.Add(new DataColumn("Status", typeof(string)));
             DataTable.ItemsSource = reservationTable.DefaultView;
 
-            Task.Run(() => InitializeDataGrid_Data());
+            InitializeDataGrid_Data();
         }
 
 
@@ -54,14 +56,13 @@ namespace InterfaceAppPresentationLayer.Pages
                 StringBuilder sb = new StringBuilder();
                 foreach(Car car in reservationCars)
                     sb.Append("#" + car.ID + " " + car.Brand + " " + car.Type + ",");
-                
 
                 String cars = reservationCars.ToString();
-                AddTableRow(reservation.ID, client.FirstName + " " + client.LastName, sb.ToString().Substring(0, sb.ToString().Length - 1), reservation.ReservationDate, reservation.ReservedUntil, char.ToUpper(reservation.Arrangement.ToString().ToLower()[0]) + reservation.Arrangement.ToString().ToLower().Substring(1), reservation.StartLocation, reservation.EndLocation, reservation.OrderDate, invoice.ID, "€" + invoice.TotalInc, (invoice.PaymentDue == 0) ? "Payed" : "Unpaid");
+                AddTableRow(reservation.ID, client.FirstName + " " + client.LastName, sb.ToString().Substring(0, sb.ToString().Length - 1), reservation.ReservationDate, reservation.ReservedUntil, (reservation.ReservationEnded > DateTime.MinValue) ? reservation.ReservationEnded.ToString() : "", char.ToUpper(reservation.Arrangement.ToString().ToLower()[0]) + reservation.Arrangement.ToString().ToLower().Substring(1), reservation.StartLocation, reservation.EndLocation, reservation.OrderDate, invoice.ID, "€" + invoice.TotalInc, (invoice.PaymentDue == 0) ? "Paid" : "Unpaid");
             }
         }
 
-        private void AddTableRow(int id, string client, string cars, DateTime from, DateTime until, string arrangement, string startLocation, string endLocation, DateTime orderDate, int invoiceID, string totalInc, string status)
+        private void AddTableRow(int id, string client, string cars, DateTime from, DateTime until, string returned, string arrangement, string startLocation, string endLocation, DateTime orderDate, int invoiceID, string totalInc, string status)
         {
             DataRow row = reservationTable.NewRow();
             row[0] = id;
@@ -69,13 +70,14 @@ namespace InterfaceAppPresentationLayer.Pages
             row[2] = cars;
             row[3] = from;
             row[4] = until;
-            row[5] = arrangement;
-            row[6] = startLocation;
-            row[7] = endLocation;
-            row[8] = orderDate;
-            row[9] = invoiceID;
-            row[10] = totalInc;
-            row[11] = status;
+            row[5] = returned;
+            row[6] = arrangement;
+            row[7] = startLocation;
+            row[8] = endLocation;
+            row[9] = orderDate;
+            row[10] = invoiceID;
+            row[11] = totalInc;
+            row[12] = status;
             reservationTable.Rows.Add(row);
         }
 
@@ -97,20 +99,18 @@ namespace InterfaceAppPresentationLayer.Pages
         {
             DataRowView dataRowView = (DataRowView)((MenuItem) e.Source).DataContext;
             int reservationID = Int32.Parse(dataRowView[0].ToString());
+            RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            Reservation reservation = manager.GetReservation(reservationID);
+            DialogService.OpenReservationEditDialog(reservation);
         }
 
-        private async void DataMenu_View(object sender, RoutedEventArgs e)
+        private void DataMenu_View(object sender, RoutedEventArgs e)
         {
             DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
             int reservationID = Int32.Parse(dataRowView[0].ToString());
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Reservation reservation = manager.GetReservation(reservationID);
-            ReservationView dialog = new ReservationView(reservation);
-            var result = await dialog.ShowAsync();
-            if(result == ContentDialogResult.Primary) { 
-
-            }
-                
+            DialogService.OpenReservationViewDialog(reservation);
         }
 
         private async void DataMenu_Delete(object sender, RoutedEventArgs e)

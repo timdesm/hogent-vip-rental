@@ -16,6 +16,12 @@ namespace DomainLayer.Domain
             CarID = car.ID;
         }
 
+        public CarReservation(int reservationID, int carID)
+        {
+            ReservationID = reservationID;
+            CarID = carID;
+        }
+
         public int ReservationID { get; set; }
         public Reservation Reservation { get; set; }
 

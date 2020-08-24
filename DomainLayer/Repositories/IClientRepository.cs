@@ -14,5 +14,6 @@ namespace DomainLayer.Repositories
         IEnumerable<Client> FindNewest(int amount);
         void RemoveClient(int id);
         int GetYealyReservations(Client client, int year);
+        void UpdateClient(Client client);
     }
 }
