@@ -41,11 +41,6 @@
                                 <ui:FontIcon Glyph="&#xe1a3;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="{DynamicResource general_delete}" Click="DataMenu_Delete">
-                            <MenuItem.Icon>
-                                <ui:FontIcon Glyph="&#xE107;" />
-                            </MenuItem.Icon>
-                        </MenuItem>
                     </ContextMenu>
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>

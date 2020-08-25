@@ -141,11 +141,6 @@
                                         <ui:FontIcon Glyph="&#xe1a3;" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Header="{DynamicResource general_delete}" Click="NewestClientsMenu_Delete">
-                                    <MenuItem.Icon>
-                                        <ui:FontIcon Glyph="&#xE107;" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
                             </ContextMenu>
                         </DataGrid.Resources>
                         <DataGrid.RowStyle>
@@ -180,9 +175,7 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Header="{DynamicResource invoice_markpaid}" Click="InvoiceMenu_MarkPaid">
-                                    <MenuItem.Icon>
-                                        <ui:FontIcon Glyph="&#xE107;" />
-                                    </MenuItem.Icon>
+                                    
                                 </MenuItem>
                             </ContextMenu>
                         </DataGrid.Resources>

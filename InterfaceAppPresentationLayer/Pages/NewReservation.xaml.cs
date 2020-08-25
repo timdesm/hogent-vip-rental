@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DomainLayer.Domain;
+using DomainLayer.Utilities;
 using InterfaceAppPresentationLayer.Classes;
 using ModernWpf.Controls;
 using System;
@@ -16,11 +17,7 @@ namespace InterfaceAppPresentationLayer.Pages
     public partial class NewReservation : Page
     {
         DataTable AvailableCarsTable;
-
         ReservationArrangementType Type;
-        DateTime From;
-        DateTime Until;
-
 
         public NewReservation()
         {
@@ -108,13 +105,16 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void Submit_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            DateTime from;
+            DateTime until;
+
             if (inClient.SelectedIndex < 0) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must selected a client out of the list"); return; }
             if(!int.TryParse(inClient.SelectedItem.ToString().Split(" ")[0].Substring(1), out int clientID)) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "Something went wrong while retrieving the client from the list"); return; }
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Client client = manager.GetClient(clientID);
             if (inArrangement.SelectedIndex < 0 || !Enum.TryParse(inArrangement.SelectedItem.ToString().ToUpper(), out Type)) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select a arrangement from the list"); return; }
-            if (inFromDate.SelectedDate == null || inFromTime.SelectedIndex < 0 || !TimeSpan.TryParse(inFromTime.SelectedItem.ToString(), out TimeSpan fromTime)) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select pickup date and time"); return; }
-            if (inUntilDate.SelectedDate == null || inUntilTime.SelectedIndex < 0 || !TimeSpan.TryParse(inUntilTime.SelectedItem.ToString(), out TimeSpan untilTime)) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select return date and time"); return; }
+            if ((from = GetFrom()) <= DateTime.MinValue) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select pickup date and time"); return; }
+            if ((until = GetUntil()) <= DateTime.MinValue) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select return date and time"); return; }
             if (inStartLocation.SelectedIndex < 0) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select pickup location"); return; }
             if (inEndLocation.SelectedIndex < 0) { MainWindow.DisplayThrowbackDialog("Reservation Creation Error", "You must select return location"); return; }
             if (client.Type == ClientType.PRIVATE && AvailableCars.SelectedItems.Count > 1) { MainWindow.DisplayThrowbackDialog("Reservation Edit Error", "Private clients can select a maximum of 1 car"); return; }
@@ -141,8 +141,13 @@ namespace InterfaceAppPresentationLayer.Pages
 
             try
             {
-                manager.AddReservation(client, Type, From, Until, startLocation, endLocation, cars, DateTime.Now, 6);
+                Reservation reservation = manager.AddReservation(client, Type, from, until, startLocation, endLocation, cars, DateTime.Now, 6);
                 MainWindow.DisplayThrowbackDialog("Successfull", "The reservation has been added to the list");
+                if(RegexUtilities.IsValidEmail(client.Email, true))
+                {
+                    MailService.Send_NewReservation(client.Email, reservation, cars);
+                    MailService.Send_NewInvoice(client.Email, client.FirstName, client.LastName, client.CompanyName, manager.GetInvoice(reservation.InvoiceID), manager.GetInvoiceItems(reservation.InvoiceID));
+                }
             }
             catch (Exception error)
             {
@@ -162,18 +167,22 @@ namespace InterfaceAppPresentationLayer.Pages
                 {
                     inUntilDate.IsEnabled = false;
                     inUntilTime.IsEnabled = false;
-                    if (inFromDate.SelectedDate != null && inFromTime.SelectedIndex >= 0)
+                    DateTime from;
+                    DateTime until;
+                    if ((from = GetFrom()) > DateTime.MinValue)
                     {
-                        Until = From.AddHours(10); // Static Wellness rent hour (10 hours)
-                        inUntilDate.DisplayDateStart = Until;
-                        inUntilDate.SelectedDate = Until;
-                        inUntilDate.DisplayDateEnd = Until;
-                        inUntilTime.SelectedIndex = inUntilTime.Items.IndexOf(Until.ToString("HH:mm"));
+                        until = from.AddHours(10); // Static Wellness rent hour (10 hours)
+                        inUntilDate.DisplayDateStart = until;
+                        inUntilDate.SelectedDate = until;
+                        inUntilDate.DisplayDateEnd = until;
+                        inUntilTime.SelectedIndex = inUntilTime.Items.IndexOf(until.ToString("HH:00"));
+                        inUntilDate.IsEnabled = false;
+                        inUntilTime.IsEnabled = false;
                     }
                 }
                 else
                 {
-                    if (inFromDate.SelectedDate != null && inFromTime.SelectedIndex >= 0 && TimeSpan.TryParse(inFromTime.SelectedItem.ToString(), out TimeSpan time))
+                    if (GetFrom() > DateTime.MinValue)
                     {
                         inUntilDate.IsEnabled = true;
                         inUntilTime.IsEnabled = true;
@@ -187,6 +196,21 @@ namespace InterfaceAppPresentationLayer.Pages
             }
         }
 
+        private DateTime GetFrom()
+        {
+            if (inFromDate.SelectedDate != null && inFromTime.SelectedIndex >= 0 && TimeSpan.TryParse(inFromTime.SelectedItem.ToString(), out TimeSpan time))
+                return inFromDate.SelectedDate.Value.Date + time;
+            return DateTime.MinValue;
+        }
+
+        private DateTime GetUntil()
+        {
+            if (GetFrom() > DateTime.MinValue)
+                if (inUntilDate.SelectedDate != null && inUntilTime.SelectedIndex >= 0 && TimeSpan.TryParse(inUntilTime.SelectedItem.ToString(), out TimeSpan untilTime))
+                    return inUntilDate.SelectedDate.Value.Date + untilTime;
+            return DateTime.MinValue;
+        }
+
         private void inFromDate_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             CheckFromIputs();
@@ -195,43 +219,6 @@ namespace InterfaceAppPresentationLayer.Pages
         private void inFromTime_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             CheckFromIputs();
-        }
-
-        private void CheckFromIputs()
-        {
-            if (inFromDate.SelectedDate != null && inFromTime.SelectedIndex >= 0 && TimeSpan.TryParse(inFromTime.SelectedItem.ToString(), out TimeSpan time))
-            {
-                From = inFromDate.SelectedDate ?? DateTime.Now;
-                From = From + time;
-
-                if (Type == ReservationArrangementType.WELLNESS)
-                {
-                    Until = From.AddHours(10); // Static Wellness rent hour (10 hours)
-                    inUntilDate.DisplayDateStart = Until;
-                    inUntilDate.SelectedDate = Until;
-                    inUntilDate.DisplayDateEnd = Until;
-                    inUntilTime.SelectedIndex = inUntilTime.Items.IndexOf(Until.ToString("HH:mm"));
-                }
-                else
-                {
-                    inUntilDate.IsEnabled = true;
-                    inUntilTime.IsEnabled = true;
-                    inUntilDate.SelectedDate = From;
-                    inUntilDate.DisplayDateStart = From;
-                    DateTime maxUntil = From.AddHours(11);
-                    inUntilDate.DisplayDateEnd = maxUntil;
-                }
-
-                if (inUntilDate.SelectedDate != null && inUntilTime.SelectedIndex >= 0 && TimeSpan.TryParse(inUntilTime.SelectedItem.ToString(), out TimeSpan untilTime))
-                {
-                    LoadAvailableCars(From, Until, 6.0);
-                }
-            }
-            else
-            {
-                inUntilDate.IsEnabled = false;
-                inUntilTime.IsEnabled = false;
-            }
         }
 
         private void inUntilDate_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -244,17 +231,48 @@ namespace InterfaceAppPresentationLayer.Pages
             CheckUntilInput();
         }
 
+        private void CheckFromIputs()
+        {
+            DateTime from;
+            DateTime until;
+            if ((from = GetFrom()) > DateTime.MinValue)
+            {
+                if (Type == ReservationArrangementType.WELLNESS)
+                {
+                    until = from.AddHours(10); // Static Wellness rent hour (10 hours)
+                    inUntilDate.DisplayDateStart = until;
+                    inUntilDate.SelectedDate = until;
+                    inUntilDate.DisplayDateEnd = until;
+                    inUntilTime.SelectedIndex = inUntilTime.Items.IndexOf(until.ToString("HH:00"));
+                    inUntilDate.IsEnabled = false;
+                    inUntilTime.IsEnabled = false;
+                }
+                else
+                {
+                    inUntilDate.IsEnabled = true;
+                    inUntilTime.IsEnabled = true;
+                    inUntilDate.SelectedDate = from.Date;
+                    inUntilDate.DisplayDateStart = from.Date;
+                    DateTime maxUntil = from.AddHours(11);
+                    inUntilDate.DisplayDateEnd = maxUntil;
+                }
+
+                if ((until = GetUntil()) > DateTime.MinValue)
+                    LoadAvailableCars(from, until, 6.0);
+            }
+            else
+            {
+                inUntilDate.IsEnabled = false;
+                inUntilTime.IsEnabled = false;
+            }
+        }
+
         private void CheckUntilInput()
         {
-            if (inFromDate.SelectedDate != null && inFromTime.SelectedIndex >= 0 && TimeSpan.TryParse(inFromTime.SelectedItem.ToString(), out TimeSpan time))
-            {
-                if (inUntilDate.SelectedDate != null && inUntilTime.SelectedIndex >= 0 && TimeSpan.TryParse(inUntilTime.SelectedItem.ToString(), out TimeSpan untilTime))
-                {
-                    Until = inUntilDate.SelectedDate ?? DateTime.Now;
-                    Until = Until + untilTime;
-                    LoadAvailableCars(From, Until, 6.0);
-                }
-            }
+            DateTime from;
+            DateTime until;
+            if ((from = GetFrom()) > DateTime.MinValue && (until = GetUntil()) > DateTime.MinValue)
+               LoadAvailableCars(from, until, 6.0);
         }
     }
 }

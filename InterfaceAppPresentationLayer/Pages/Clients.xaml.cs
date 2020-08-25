@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using DomainLayer.Domain;
 using InterfaceAppPresentationLayer.Classes;
+using InterfaceAppPresentationLayer.Dialogs;
 using ModernWpf.Controls;
 using System;
 using System.Data;
@@ -43,6 +44,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void InitializeDataGrid()
         {
+            clientTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (Client client in manager.GetAllClients())
             {
@@ -77,6 +79,7 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Client client = manager.GetClient(clientID);
             DialogService.OpenClientEditDialog(client);
+            InitializeDataGrid();
         }
 
         private void ClientsMenu_View(object sender, System.Windows.RoutedEventArgs e)
@@ -86,11 +89,7 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Client client = manager.GetClient(clientID);
             DialogService.OpenClientViewDialog(client);
-        }
-
-        private void ClientsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
-        {
-
+            InitializeDataGrid();
         }
     }
 }

@@ -9,11 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Emails\invoice.html" />
+    <None Remove="Resources\Emails\welcome.html" />
     <None Remove="Resources\unicodeCountries.json" />
     <None Remove="Resources\unicodeLanguage.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\Emails\invoice.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Emails\welcome.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\unicodeCountries.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

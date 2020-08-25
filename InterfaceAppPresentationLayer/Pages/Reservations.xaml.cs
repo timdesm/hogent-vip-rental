@@ -47,6 +47,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void InitializeDataGrid_Data()
         {
+            reservationTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (Reservation reservation in manager.GetAllReservations())
             {
@@ -117,12 +118,12 @@ namespace InterfaceAppPresentationLayer.Pages
         {
             DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
             int reservationID = Int32.Parse(dataRowView[0].ToString());
-
             DeleteDialog dialog = new DeleteDialog("reservation #" + reservationID);
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary) {
                 RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
                 manager.RemoveReservation(reservationID);
+                InitializeDataGrid_Data();
             }
         }
     }

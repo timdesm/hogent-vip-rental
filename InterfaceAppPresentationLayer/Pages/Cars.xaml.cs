@@ -48,6 +48,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void InitializeDataGrid_Data()
         {
+            carTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (Car car in manager.GetAllCars())
             {
@@ -110,6 +111,7 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Car car = manager.GetCar(carID);
             DialogService.OpenCarEditDialog(car);
+            InitializeDataGrid_Data();
         }
 
         private void DataMenu_View(object sender, RoutedEventArgs e)
@@ -119,18 +121,7 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Car car = manager.GetCar(carID);
             DialogService.OpenCarViewDialog(car);
-        }
-
-        private async void DataMenu_Delete(object sender, RoutedEventArgs e)
-        {
-            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
-            int carID = Int32.Parse(dataRowView[0].ToString());
-            DeleteDialog dialog = new DeleteDialog("car #" + carID);
-            var result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
-            {
-                RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
-            }
+            InitializeDataGrid_Data();
         }
     }
 }

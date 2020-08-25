@@ -123,6 +123,12 @@ namespace DomainLayer.Domain
             uow.Complete();
         }
 
+        public void UpdateInvoice(Invoice invoice)
+        {
+            uow.Invoices.UpdateInvoice(invoice);
+            uow.Complete();
+        }
+
         public List<Car> GetAvailableCars(DateTime from, DateTime until, double hourRange)
         {
             return uow.Cars.CarsAvailable(from, until, hourRange).ToList();
@@ -164,7 +170,7 @@ namespace DomainLayer.Domain
             List<CarReservation> carReservations = uow.CarReservations.ReservationCars(reservation.ID).ToList();
             foreach (CarReservation cr in carReservations)
                 uow.CarReservations.RemoveCarReservation(cr);
-            RemoveInvoice(uow.Invoices.Find(reservation.ID));
+            RemoveInvoice(uow.Invoices.Find(reservation.InvoiceID));
             uow.Reservations.RemoveReservation(reservation);
             uow.Complete();
         }
@@ -259,7 +265,7 @@ namespace DomainLayer.Domain
             uow.Complete();
         }
 
-        public void AddReservation(Client client, ReservationArrangementType arrangement, DateTime from, DateTime until, String startLocation, String endLocation, List<Car> cars, DateTime orderDate, Double vatPercent)
+        public Reservation AddReservation(Client client, ReservationArrangementType arrangement, DateTime from, DateTime until, String startLocation, String endLocation, List<Car> cars, DateTime orderDate, Double vatPercent)
         {
             if(from == null || until == null) throw new DomainException("The pickup and return dates must be given");
             TimeSpan diffTime = until - from;
@@ -276,7 +282,9 @@ namespace DomainLayer.Domain
             Reservation reservation = new Reservation(client, new List<CarReservation>(), orderDate, from, startLocation, endLocation, arrangement, until, DateTime.MinValue, invoice);
             uow.Reservations.AddReservation(reservation);
             uow.Complete();
-            AddCarReservations(reservation, cars); 
+            AddCarReservations(reservation, cars);
+
+            return reservation;
         }
     }
 }

@@ -50,5 +50,10 @@ namespace DataLayer.Repositories
         {
             return context.Invoices.Last();
         }
+
+        public void UpdateInvoice(Invoice invoice)
+        {
+            context.Invoices.Update(invoice);
+        }
     }
 }

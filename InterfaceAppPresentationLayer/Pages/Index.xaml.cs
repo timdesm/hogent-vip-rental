@@ -2,6 +2,7 @@
 using DataLayer;
 using DomainLayer.Domain;
 using InterfaceAppPresentationLayer.Classes;
+using InterfaceAppPresentationLayer.Dialogs;
 using ModernWpf.Controls;
 using System;
 using System.Data;
@@ -50,9 +51,8 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void LoadTodaysReservations()
         {
+            todaysReservationsTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
-            
-
             foreach (Reservation reservation in manager.GetReservations(DateTime.Today, DateTime.Today.AddDays(1)))
             {
                 DomainLayer.Domain.Invoice invoice = manager.GetInvoice(reservation.InvoiceID);
@@ -98,6 +98,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void LoadActiveReservations()
         {
+            activeReservationsTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (Reservation reservation in manager.GetActiveReservations())
             {
@@ -131,6 +132,9 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Reservation reservation = manager.GetReservation(reservationID);
             DialogService.OpenReservationEditDialog(reservation);
+            LoadTodaysReservations();
+            LoadActiveReservations();
+            LoadUnpaidInvoices();
         }
 
         private void ReservationsMenu_View(object sender, System.Windows.RoutedEventArgs e)
@@ -140,11 +144,25 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Reservation reservation = manager.GetReservation(reservationID);
             DialogService.OpenReservationViewDialog(reservation);
+            LoadTodaysReservations();
+            LoadActiveReservations();
+            LoadUnpaidInvoices();
         }
 
-        private void ReservationsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
+        private async void ReservationsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
+            int reservationID = Int32.Parse(dataRowView[0].ToString());
+            DeleteDialog dialog = new DeleteDialog("reservation #" + reservationID);
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+                manager.RemoveReservation(reservationID);
+                LoadTodaysReservations();
+                LoadActiveReservations();
+                LoadUnpaidInvoices();
+            }
         }
 
         private void InitializeNewestClients()
@@ -163,6 +181,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void LoadNewestClients()
         {
+            newClientsTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (Client client in manager.GetNewestClients(10))
             {
@@ -188,6 +207,7 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Client client = manager.GetClient(clientID);
             DialogService.OpenClientEditDialog(client);
+            LoadNewestClients();
         }
 
         private void NewestClientsMenu_View(object sender, System.Windows.RoutedEventArgs e)
@@ -197,11 +217,7 @@ namespace InterfaceAppPresentationLayer.Pages
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             Client client = manager.GetClient(clientID);
             DialogService.OpenClientViewDialog(client);
-        }
-
-        private void NewestClientsMenu_Delete(object sender, System.Windows.RoutedEventArgs e)
-        {
-
+            LoadNewestClients();
         }
 
         private void InitializeUnpaidInvoices()
@@ -222,6 +238,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void LoadUnpaidInvoices()
         {
+            unpaidInvoicesTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (DomainLayer.Domain.Invoice invoice in manager.GetUnpaidInvoices())
             {
@@ -259,6 +276,17 @@ namespace InterfaceAppPresentationLayer.Pages
             int invoiceID = Int32.Parse(dataRowView[0].ToString());
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             DomainLayer.Domain.Invoice invoice = manager.GetInvoice(invoiceID);
+            if(invoice.PaymentDue > 0)
+            {
+                invoice.PaymentDue = 0;
+                manager.UpdateInvoice(invoice);
+                LoadUnpaidInvoices();
+                MainWindow.DisplayThrowbackDialog("Invoice Updated", "The invoice has been updated to paid.");
+            }
+            else
+            {
+                MainWindow.DisplayThrowbackDialog("Invoice Already Paid", "The invoice you tried to mark as paid is already paid.");
+            }
         }
     }
 }

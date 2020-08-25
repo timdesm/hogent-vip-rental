@@ -27,6 +27,7 @@ namespace InterfaceAppPresentationLayer.Classes
                 message.To.Add(new MailAddress(toAddress));
             message.Subject = subject;
             message.Body = htmlMessage;
+            message.IsBodyHtml = true;
             smtp.Port = Port;
             smtp.Host = Host;
             smtp.EnableSsl = isSSL;
@@ -36,19 +37,29 @@ namespace InterfaceAppPresentationLayer.Classes
             smtp.Send(message);
         }
 
-        public static void Send_WelcomeMail(string email)
+        public static void Send_WelcomeMail(string email, string firstName, string lastName, ClientType type, string phone, string company)
         {
             if(RegexUtilities.IsValidEmail(email, true))
             {
                 try
                 {
-                    SendMail(new List<string>() { email }, "Welcome to Rudy's VIP service", "Test message");
+                    String message = FileService.GetFileAsString(@"Resources/Emails/welcome.html");
+                    String name = firstName + " " + lastName;
+                    if (!string.IsNullOrWhiteSpace(company) && firstName == "N/A" && lastName == "N/A")
+                        name = company;
+                    message = message.Replace("{{name}}", name);
+                    message = message.Replace("{{first_name}}", firstName);
+                    message = message.Replace("{{last_name}}", lastName);
+                    message = message.Replace("{{type}}", char.ToUpper(type.ToString().ToLower()[0]) + type.ToString().ToLower().Substring(1));
+                    message = message.Replace("{{email}}", email);
+                    message = message.Replace("{{phone}}", (!string.IsNullOrWhiteSpace(phone)) ? phone : "N/A");
+                    SendMail(new List<string>() { email }, "Welcome to VIP Service ", message);
                 }
-                catch(Exception ex) { LogService.WriteLog(new List<String>() { "Mail Service Exeption (Weclome mail): ", ex.Message, " ", ex.InnerException.ToString(), ex.StackTrace }); }
+                catch(Exception ex) { LogService.WriteLog(new List<String>() { "Mail Service Exeption (Weclome mail): ", ex.Message, " ", (ex.InnerException != null) ? ex.InnerException.ToString() : "", ex.StackTrace }); }
             }
         }
 
-        public static void Send_NewReservation(string email, Reservation reservation)
+        public static void Send_NewReservation(string email, Reservation reservation, List<Car> cars)
         {
             if (RegexUtilities.IsValidEmail(email, true))
             {
@@ -60,15 +71,30 @@ namespace InterfaceAppPresentationLayer.Classes
             }
         }
 
-        public static void Send_NewInvoice(string email, Invoice invoice)
+        public static void Send_NewInvoice(string email, string firstName, string lastName, string company, Invoice invoice, List<InvoiceItem> items)
         {
             if (RegexUtilities.IsValidEmail(email, true))
             {
                 try
                 {
-                    SendMail(new List<string>() { email }, "You have a new invoice", "Test message");
+                    String message = FileService.GetFileAsString(@"Resources/Emails/invoice.html");
+                    String name = firstName + " " + lastName;
+                    if (!string.IsNullOrWhiteSpace(company) && firstName == "N/A" && lastName == "N/A")
+                        name = company;
+                    string htmlItems = "";
+                    foreach(InvoiceItem ii in items)
+                        htmlItems += "<tr><td width=\"80%\" class=\"purchase_item\"><span class=\"f-fallback\" >" + ii.Description + "</span></td><td class=\"align-right\" width =\"20 %\" ><span class=\"f-fallback\" >" + string.Format("€{0:0.00}", ii.Total) + "</span></td></tr>";
+                    message = message.Replace("{{name}}", name);
+                    message = message.Replace("{{invoice_id}}", "#" + invoice.ID);
+                    message = message.Replace("{{date}}", invoice.InvoiceDate.ToString("dd/MM/yyyy"));
+                    message = message.Replace("{{items}}", htmlItems);
+                    message = message.Replace("{{discount}}", string.Format("€{0:0.00}", invoice.Discount));
+                    message = message.Replace("{{vat}}", string.Format("€{0:0.00}", invoice.VAT));
+                    message = message.Replace("{{total}}", string.Format("€{0:0.00}", invoice.TotalInc));
+                    message = message.Replace("{{action_url}}", "https://hogent.timdesmet.be/project/invoice?id=" + invoice.ID  + "&action=pay");
+                    SendMail(new List<string>() { email }, "You have a new invoice", message);
                 }
-                catch (Exception ex) { LogService.WriteLog(new List<String>() { "Mail Service Exeption (New Invoice): ", ex.Message, " ", ex.InnerException.ToString(), ex.StackTrace }); }
+                catch (Exception ex) { LogService.WriteLog(new List<String>() { "Mail Service Exeption (Weclome mail): ", ex.Message, " ", (ex.InnerException != null) ? ex.InnerException.ToString() : "", ex.StackTrace }); }
             }
         }
 

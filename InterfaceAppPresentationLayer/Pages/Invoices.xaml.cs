@@ -39,6 +39,7 @@ namespace InterfaceAppPresentationLayer.Pages
 
         private void InitializeDataGrid_Data()
         {
+            invoiceTable.Rows.Clear();
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
             foreach (DomainLayer.Domain.Invoice invoice in manager.GetAllInvoices())
             {
@@ -73,6 +74,7 @@ namespace InterfaceAppPresentationLayer.Pages
             DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
             int invoiceID = Int32.Parse(dataRowView[0].ToString());
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            InitializeDataGrid_Data();
         }
 
         private void DataMenu_MarkPaid(object sender, RoutedEventArgs e)
@@ -80,6 +82,18 @@ namespace InterfaceAppPresentationLayer.Pages
             DataRowView dataRowView = (DataRowView)((MenuItem)e.Source).DataContext;
             int invoiceID = Int32.Parse(dataRowView[0].ToString());
             RentalManager manager = new RentalManager(new UnitOfWork(new RentalContext()));
+            DomainLayer.Domain.Invoice invoice = manager.GetInvoice(invoiceID);
+            if (invoice.PaymentDue > 0)
+            {
+                invoice.PaymentDue = 0;
+                manager.UpdateInvoice(invoice);
+                InitializeDataGrid_Data();
+                MainWindow.DisplayThrowbackDialog("Invoice Updated", "The invoice has been updated to paid.");
+            }
+            else
+            {
+                MainWindow.DisplayThrowbackDialog("Invoice Already Paid", "The invoice you tried to mark as paid is already paid.");
+            }
         }
     }
 }
